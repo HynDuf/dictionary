@@ -1,5 +1,7 @@
 package dictionary.server.database;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,7 +19,6 @@ public class Database {
             "jdbc:mysql://" + HOST_NAME + ":" + PORT + "/" + DB_NAME;
 
     private Connection connection = null;
-    private String word;
 
     /**
      * Connect to MYSQL database.
@@ -86,16 +87,16 @@ public class Database {
     }
 
     /**
-     * Lookup an English `word` in database (look for the exact word `word`).
+     * Lookup an English word `target` in database (look for the exact word `target`).
      *
-     * @param word the searched word (full word)
-     * @return the Vietnamese definition of `word`, if not found return "404" as a String.
+     * @param target the searched word (full word)
+     * @return the Vietnamese definition of `target`, if not found return "404" as a String.
      */
-    public String lookUpWord(final String word) {
+    public String lookUpWord(final String target) {
         final String SQL_QUERY = "SELECT definition FROM dictionary WHERE target = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
-            ps.setString(1, word);
+            ps.setString(1, target);
             try {
                 ResultSet rs = ps.executeQuery();
                 try {
@@ -119,14 +120,14 @@ public class Database {
     /**
      * Insert new word to database.
      *
-     * @param word English word
+     * @param target English word
      * @param definition Vietnamese definition
      */
-    public void insertWord(final String word, final String definition) {
+    public void insertWord(final String target, final String definition) {
         final String SQL_QUERY = "INSERT INTO dictionary (target, definition) VALUES (?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
-            ps.setString(1, word);
+            ps.setString(1, target);
             ps.setString(2, definition);
             try {
                 ps.executeUpdate();
@@ -134,9 +135,9 @@ public class Database {
                 // `word` is already in database
                 System.out.println(
                         "Cannot insert `"
-                                + word
+                                + target
                                 + "` to dictionary as `"
-                                + word
+                                + target
                                 + "` is already in the database!");
                 return;
             } finally {
@@ -148,17 +149,17 @@ public class Database {
     }
 
     /**
-     * Delete the word `word` from the database.
+     * Delete the word `targe` from the database.
      *
-     * <p>Nothing happens if `word` is not in the database for deletion.
+     * <p>Nothing happens if `target` is not in the database for deletion.
      *
-     * @param word the delete word
+     * @param target the delete word
      */
-    public void deleteWord(final String word) {
+    public void deleteWord(final String target) {
         final String SQL_QUERY = "DELETE FROM dictionary WHERE target = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
-            ps.setString(1, word);
+            ps.setString(1, target);
             try {
                 ps.executeUpdate();
             } finally {
@@ -170,19 +171,18 @@ public class Database {
     }
 
     /**
-     * Update the word `word` to the according definition.
+     * Update the word `target` to the according definition.
      *
-     * <p>Nothing happens if `word` is not in the database for update.
+     * <p>Nothing happens if `target` is not in the database for update.
      *
-     * @param word the update word
+     * @param target the update word
      * @param definition the update definition
      */
-    public void updateWordDefinition(final String word, final String definition) {
-        this.word = word;
+    public void updateWordDefinition(final String target, final String definition) {
         final String SQL_QUERY = "UPDATE dictionary SET definition = ? WHERE target = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
-            ps.setString(1, word);
+            ps.setString(1, target);
             ps.setString(2, definition);
             try {
                 ps.executeUpdate();
@@ -190,6 +190,53 @@ public class Database {
                 close(ps);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Export all words to a csv file with `filename` name.
+     *
+     * @param filename the name of the file to export
+     */
+    public void exportToCsv(String filename) {
+        final String SQL_QUERY = "SELECT * FROM dictionary";
+        try {
+            PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
+            try {
+                ResultSet rs = ps.executeQuery();
+                try {
+                    FileWriter fw = new FileWriter(filename + ".csv");
+                    int cols = rs.getMetaData().getColumnCount();
+                    for (int i = 1; i <= cols; ++i) {
+                        fw.append(rs.getMetaData().getColumnLabel(i));
+                        if (i < cols) {
+                            fw.append(',');
+                        } else {
+                            fw.append('\n');
+                        }
+                    }
+
+                    while (rs.next()) {
+                        for (int i = 1; i <= cols; ++i) {
+                            fw.append(rs.getString(i));
+                            if (i < cols) {
+                                fw.append(',');
+                            }
+                        }
+                        fw.append('\n');
+                    }
+                    fw.flush();
+                    fw.close();
+                } finally {
+                    close(rs);
+                }
+            } finally {
+                close(ps);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

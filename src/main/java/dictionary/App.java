@@ -11,7 +11,8 @@ public class App {
         String word = "hello";
         String definition = database.lookUpWord(word);
         System.out.println(definition);
-        database.insertWord("house", "(danh từ): ngôi nhà");
+        database.insertWord("house", "(danh từ): ngôi nhà 2");
+        database.exportToCsv("dictionary");
         database.closeDatabase();
     }
 }
