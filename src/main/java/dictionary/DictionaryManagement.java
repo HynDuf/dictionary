@@ -36,6 +36,8 @@ public class DictionaryManagement {
 
         }
 
+        System.out.println("Inserted Succesfully");
+
     }
 
     public static void main(String[] args) throws Exception {
