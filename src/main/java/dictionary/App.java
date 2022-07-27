@@ -2,17 +2,18 @@ package dictionary;
 
 import dictionary.server.Dictionary;
 import dictionary.server.UserInput;
-
 public class App {
-    private static Dictionary dictionary;
-    private static UserInput userInput;
+    public static Dictionary dictionary;
+    public static UserInput userInput;
 
     private static final int LOOK_UP = 1;
     private static final int SHOW_ALL = 2;
     private static final int INSERT = 3;
     private static final int DELETE = 4;
     private static final int UPDATE = 5;
-    private static final int EXIT = 6;
+
+    private static final int ADVANCED = 6;
+    private static final int EXIT = 7;
 
     /** Option 1. Look up a word's definition. */
     public static void lookUpWord() {
@@ -44,6 +45,25 @@ public class App {
             if (!dictionary.insertWord(target, definition)) {
                 System.out.println("`" + target + "` already exists in the dictionary!");
             }
+        }
+    }
+    /** Call insertFromFile(),showAllWords(), dictionaryLookup(). */
+    public static void dictionaryAdvanced() throws  Exception {
+        System.out.println("Choose an option to proceed:");
+        System.out.println("1. Look up");
+        System.out.println("2. Show all words");
+        System.out.println("3. Insert from file");
+        int selection = userInput.readInteger();
+        userInput.readLine();
+        switch (selection) {
+            case LOOK_UP:
+                lookUpWord();
+                break;
+            case SHOW_ALL:
+                showAllWords();
+                break;
+            case INSERT:
+                DictionaryManagement.insertFromFile();
         }
     }
 
@@ -90,8 +110,9 @@ public class App {
             System.out.println("3. Insert words");
             System.out.println("4. Delete a word");
             System.out.println("5. Update a word's definition");
-            System.out.println("6. Exit");
-            System.out.print("==> Enter a selection (1-6): ");
+            System.out.println("6. Advanced");
+            System.out.println("7. Exit");
+            System.out.print("==> Enter a selection (1-7): ");
             int selection = userInput.readInteger();
             userInput.readLine();
             if (1 <= selection && selection <= 6) {
@@ -105,7 +126,7 @@ public class App {
      *
      * @param selection the chosen selection
      */
-    public static void executeSelection(int selection) {
+    public static void executeSelection(int selection) throws Exception {
         switch (selection) {
             case LOOK_UP:
                 lookUpWord();
@@ -122,6 +143,9 @@ public class App {
             case UPDATE:
                 updateWord();
                 break;
+            case ADVANCED:
+                dictionaryAdvanced();
+                break;
             case EXIT:
                 exitApplication();
                 break;
@@ -136,7 +160,7 @@ public class App {
      *
      * @param args cmd arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         dictionary = new Dictionary();
         userInput = new UserInput(System.in);
         while (true) {
