@@ -80,8 +80,11 @@ public class DictionaryManagement {
                 }
                 String target = getLine.substring(0, pos).trim();
                 String definition = getLine.substring(pos + 1).trim();
-                dictionary.insertWord(target, definition);
-                System.out.println("Inserted `" + target + "' successfully");
+                if (dictionary.insertWord(target, definition)) {
+                    System.out.println("Inserted `" + target + "' successfully");
+                } else {
+                    System.out.println("`" + target + "` already exists in the dictionary!");
+                }
             }
             scFile.close();
         } catch (FileNotFoundException e) {

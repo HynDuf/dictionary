@@ -1,12 +1,14 @@
 package dictionary.server;
 
+import dictionary.server.database.Database;
+
 import java.util.ArrayList;
 
 public class Dictionary {
-    private ArrayList<Word> words;
 
+    /** Constructor. Connect to Database. */
     public Dictionary() {
-        words = new ArrayList<Word>();
+        Database.connectToDatabase();
     }
 
     /**
@@ -16,12 +18,7 @@ public class Dictionary {
      * @return the definition, if not found "404" is returned as a String.
      */
     public String lookUpWord(final String target) {
-        for (Word w : words) {
-            if (w.getWordTarget().equals(target)) {
-                return w.getWordExplain();
-            }
-        }
-        return "404";
+        return Database.lookUpWord(target);
     }
 
     /**
@@ -32,14 +29,7 @@ public class Dictionary {
      * @return true if `target` hasn't been added yet, false otherwise
      */
     public boolean insertWord(final String target, final String definition) {
-        for (Word w : words) {
-            if (w.getWordTarget().equals(target)) {
-                return false;
-            }
-        }
-        Word w = new Word(target, definition);
-        words.add(w);
-        return true;
+        return Database.insertWord(target, definition);
     }
 
     /**
@@ -49,13 +39,7 @@ public class Dictionary {
      * @return true if successfully delete, false otherwise
      */
     public boolean deleteWord(final String target) {
-        for (int i = 0; i < words.size(); ++i) {
-            if (words.get(i).getWordTarget().equals(target)) {
-                words.remove(i);
-                return true;
-            }
-        }
-        return false;
+        return Database.deleteWord(target);
     }
 
     /**
@@ -66,13 +50,7 @@ public class Dictionary {
      * @return true if successfully updated, false otherwise
      */
     public boolean updateWordDefinition(final String target, final String definition) {
-        for (Word w : words) {
-            if (w.getWordTarget().equals(target)) {
-                w.setWordExplain(definition);
-                return true;
-            }
-        }
-        return false;
+        return Database.updateWordDefinition(target, definition);
     }
 
     /**
@@ -82,6 +60,7 @@ public class Dictionary {
      */
     public String getAllWords() {
         String result = "No      | English                                     | Vietnamese";
+        ArrayList<Word> words = Database.getAllWords();
         for (int i = 0; i < words.size(); ++i) {
             Word w = words.get(i);
             String first = String.valueOf(i + 1);
