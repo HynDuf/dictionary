@@ -1,5 +1,7 @@
 package dictionary.server;
 
+import dictionary.server.google_translate_api.TranslatorApi;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -65,7 +67,7 @@ public class DictionaryManagement {
         }
     }
 
-    /** Option 6. Insert word from file `inputFromFile.txt` */
+    /** Option 6. Insert word from file `inputFromFile.txt`. */
     public static void insertFromFile() {
 
         /** pass the path to the file as a parameter */
@@ -93,7 +95,22 @@ public class DictionaryManagement {
         }
     }
 
-    /** Option 7. Exit the application. */
+    /** Option 7. Translate English text to Vietnamese Text with GooogleTranslateAPI. */
+    public static void translateEnToVi() {
+        System.out.print("==> Enter the English text you want to translate: ");
+        String text = Helper.readLine();
+        System.out.println("The Vietnamese translated text: ");
+        System.out.println(TranslatorApi.translateEnToVi(text) + "\n");
+    }
+
+    /** Option 8. Text to Speech, speaking English text in English. */
+    public static void textToSpeech() {
+        System.out.print("==> Enter the English text you want to listen to: ");
+        String text = Helper.readLine();
+        TextToSpeech.playSound(text);
+    }
+
+    /** Option 9. Exit the application. */
     public static void exitApplication() {
         System.out.println("Exiting...");
         System.exit(0);

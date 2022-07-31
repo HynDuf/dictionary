@@ -21,9 +21,9 @@ public class TextToSpeech {
 
         if (voice != null) {
             voice.allocate();
-            System.out.print("Speaking...");
+            System.out.println("Speaking...");
             voice.speak(text);
-            System.out.print("Done...");
+            System.out.println("Done...\n");
             voice.deallocate();
         } else {
             System.err.println("Error in getting voices");
