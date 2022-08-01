@@ -1,8 +1,6 @@
 package dictionary.server;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 
 public class DictionaryManagement {
@@ -108,18 +106,16 @@ public class DictionaryManagement {
      */
     public static void dictionaryExportToFile() {
 
-
-        PrintWriter out = new PrintWriter("exportToFile.txt");
-
         try {
+            FileWriter out = new FileWriter("exportToFile.txt");
             String export = dictionary.getAllWords();
             //System.out.println(export);
             out.write(export);
             out.close();
             System.out.println("Exported successfully");
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Couldn't find `exportToFile.txt`");
+            System.out.println("An error occurred.`");
         }
     }
 
