@@ -2,13 +2,16 @@ package dictionary.server;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class DictionaryManagement {
 
     private static Dictionary dictionary = new Dictionary();
 
-    /** Option 1. Look up a word's definition. */
+    /**
+     * Option 1. Look up a word's definition.
+     */
     public static void lookUpWord() {
         System.out.print("==> Enter the English word to look up: ");
         String target = Helper.readLine();
@@ -20,12 +23,16 @@ public class DictionaryManagement {
         }
     }
 
-    /** Option 2. Show all words currently in the dictionary. */
+    /**
+     * Option 2. Show all words currently in the dictionary.
+     */
     public static void showAllWords() {
         System.out.println(dictionary.getAllWords());
     }
 
-    /** Option 3. Add new words from the command line. */
+    /**
+     * Option 3. Add new words from the command line.
+     */
     public static void insertFromCommandline() {
         System.out.print("==> Number of words to insert: ");
         int numWords = Helper.readInteger();
@@ -41,7 +48,9 @@ public class DictionaryManagement {
         }
     }
 
-    /** Option 4. Delete a word. */
+    /**
+     * Option 4. Delete a word.
+     */
     public static void deleteWord() {
         System.out.print("==> Enter the English word to delete: ");
         String target = Helper.readLine();
@@ -52,7 +61,9 @@ public class DictionaryManagement {
         }
     }
 
-    /** Option 5. Update a word's definition. */
+    /**
+     * Option 5. Update a word's definition.
+     */
     public static void updateWord() {
         System.out.print("==> Enter the English word to update: ");
         String target = Helper.readLine();
@@ -65,7 +76,9 @@ public class DictionaryManagement {
         }
     }
 
-    /** Option 6. Insert word from file `inputFromFile.txt` */
+    /**
+     * Option 6. Insert word from file `inputFromFile.txt`
+     */
     public static void insertFromFile() {
 
         /** pass the path to the file as a parameter */
@@ -90,7 +103,29 @@ public class DictionaryManagement {
         }
     }
 
-    /** Option 7. Exit the application. */
+    /**
+     * Option 7. Export to file
+     */
+    public static void dictionaryExportToFile() {
+
+
+        PrintWriter out = new PrintWriter("exportToFile.txt");
+
+        try {
+            String export = dictionary.getAllWords();
+            //System.out.println(export);
+            out.write(export);
+            out.close();
+            System.out.println("Exported successfully");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Couldn't find `exportToFile.txt`");
+        }
+    }
+
+    /**
+     * Option 8. Exit the application.
+     */
     public static void exitApplication() {
         System.out.println("Exiting...");
         System.exit(0);
