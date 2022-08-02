@@ -1,6 +1,10 @@
 package dictionary.server;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DictionaryManagement {
@@ -120,7 +124,49 @@ public class DictionaryManagement {
     }
 
     /**
-     * Option 8. Exit the application.
+     * Option 8. Searcher
+     */
+
+    public static void dictionarySeacher() {
+        try {
+            System.out.print("==> Enter the English word to search: ");
+            String target = Helper.readLine();
+
+            Trie.TrieNode root = new Trie.TrieNode();
+
+            ArrayList<String> keys = new ArrayList<String>();
+
+            keys = dictionary.exportAllWords();
+
+            for (int i = 0; i < keys.size(); i++) {
+                Trie.insert(keys.get(i));
+            }
+
+            if (Trie.search(target) == true) {
+                String result = "No      | English                                     | Vietnamese";
+                for (int i = 0; i < Trie.size; ++i) {
+                    String first = String.valueOf(i + 1);
+                    first += Helper.createSpacesString(8 - first.length());
+                    String second = " " + Trie.Searcher[i];
+                    second += Helper.createSpacesString(45 - second.length());
+                    String third = " " + dictionary.lookUpWord(Trie.Searcher[i]);
+                    result += '\n' + first + '|' + second + '|' + third;
+                }
+                System.out.println(result);
+            } else {
+                System.out.println("The word you looked up isn't in the dictionary!\n");
+            }
+            Trie.size = 0;
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("An error occurred.`");
+        }
+
+
+    }
+
+    /**
+     * Option 9. Exit the application.
      */
     public static void exitApplication() {
         System.out.println("Exiting...");

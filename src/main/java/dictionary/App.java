@@ -12,7 +12,8 @@ public class App {
     private static final int UPDATE = 5;
     private static final int INSERT_FILE = 6;
     private static final int EXPORT_FILE = 7;
-    private static final int EXIT = 8;
+    private static final int SEARCHER = 8;
+    private static final int EXIT = 9;
 
     /**
      * Display options for the commandline application.
@@ -29,11 +30,12 @@ public class App {
             System.out.println("5. Update a word's definition");
             System.out.println("6. Insert from file");
             System.out.println("7. Export to file");
-            System.out.println("8. Exit");
-            System.out.print("==> Enter a selection (1-8): ");
+            System.out.println("8. Searcher");
+            System.out.println("9. Exit");
+            System.out.print("==> Enter a selection (1-9): ");
             int selection = Helper.readInteger();
             Helper.readLine();
-            if (1 <= selection && selection <= 8) {
+            if (1 <= selection && selection <= 9) {
                 return selection;
             } else {
                 System.out.println("Invalid option!");
@@ -68,6 +70,9 @@ public class App {
                 break;
             case EXPORT_FILE:
                 DictionaryManagement.dictionaryExportToFile();
+                break;
+            case SEARCHER:
+                DictionaryManagement.dictionarySeacher();
                 break;
             case EXIT:
                 DictionaryManagement.exitApplication();

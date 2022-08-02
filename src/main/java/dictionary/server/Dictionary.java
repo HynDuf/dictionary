@@ -3,6 +3,7 @@ package dictionary.server;
 import java.util.ArrayList;
 
 public class Dictionary {
+    public final static int WordSize = 1000000;
     private ArrayList<Word> words;
 
     public Dictionary() {
@@ -94,4 +95,17 @@ public class Dictionary {
         result += '\n';
         return result;
     }
+
+    public ArrayList<String> exportAllWords() {
+        ArrayList<String> result = new ArrayList<String>();
+
+        for (int i = 0; i < words.size(); ++i) {
+            Word w = words.get(i);
+            String target = w.getWordTarget();
+            result.add(target);
+        }
+
+        return result;
+    }
+
 }
