@@ -9,11 +9,33 @@ import java.util.Scanner;
 
 public class DictionaryManagement {
 
-    private static Dictionary dictionary = new Dictionary();
+    private static Dictionary dictionary;
 
-    /**
-     * Option 1. Look up a word's definition.
-     */
+    public static void initialize() {
+        dictionary = new Dictionary();
+        dictionary.insertWord("hello", "xin chao");
+        dictionary.insertWord("head", "xin chao");
+        dictionary.insertWord("hi", "xin chao");
+        dictionary.insertWord("highlight", "xin chao");
+        dictionary.insertWord("happy", "xin chao");
+        dictionary.insertWord("happiness", "xin chao");
+        ArrayList<String> words = dictionary.exportAllWords();
+
+        for (int i = 0; i < words.size(); i++) {
+            Trie.insert(words.get(i));
+        }
+        ArrayList<String> tem = Trie.search("h");
+        System.out.println("Start\n");
+        for (String w : tem) {
+            System.out.println(w);
+        }
+        System.out.println("done\n");
+    }
+
+    /** Utility class. Stop from create an instance of the class. */
+    private DictionaryManagement() {}
+
+    /** Option 1. Look up a word's definition. */
     public static void lookUpWord() {
         System.out.print("==> Enter the English word to look up: ");
         String target = Helper.readLine();
@@ -25,16 +47,12 @@ public class DictionaryManagement {
         }
     }
 
-    /**
-     * Option 2. Show all words currently in the dictionary.
-     */
+    /** Option 2. Show all words currently in the dictionary. */
     public static void showAllWords() {
         System.out.println(dictionary.getAllWords());
     }
 
-    /**
-     * Option 3. Add new words from the command line.
-     */
+    /** Option 3. Add new words from the command line. */
     public static void insertFromCommandline() {
         System.out.print("==> Number of words to insert: ");
         int numWords = Helper.readInteger();
@@ -50,9 +68,7 @@ public class DictionaryManagement {
         }
     }
 
-    /**
-     * Option 4. Delete a word.
-     */
+    /** Option 4. Delete a word. */
     public static void deleteWord() {
         System.out.print("==> Enter the English word to delete: ");
         String target = Helper.readLine();
@@ -63,9 +79,7 @@ public class DictionaryManagement {
         }
     }
 
-    /**
-     * Option 5. Update a word's definition.
-     */
+    /** Option 5. Update a word's definition. */
     public static void updateWord() {
         System.out.print("==> Enter the English word to update: ");
         String target = Helper.readLine();
@@ -78,9 +92,7 @@ public class DictionaryManagement {
         }
     }
 
-    /**
-     * Option 6. Insert word from file `inputFromFile.txt`
-     */
+    /** Option 6. Insert word from file `inputFromFile.txt` */
     public static void insertFromFile() {
 
         /** pass the path to the file as a parameter */
@@ -105,15 +117,13 @@ public class DictionaryManagement {
         }
     }
 
-    /**
-     * Option 7. Export to file
-     */
+    /** Option 7. Export to file */
     public static void dictionaryExportToFile() {
 
         try {
             FileWriter out = new FileWriter("exportToFile.txt");
             String export = dictionary.getAllWords();
-            //System.out.println(export);
+            // System.out.println(export);
             out.write(export);
             out.close();
             System.out.println("Exported successfully");
@@ -123,51 +133,35 @@ public class DictionaryManagement {
         }
     }
 
-    /**
-     * Option 8. Searcher
-     */
-
-    public static void dictionarySeacher() {
+    /** Option 8. Searcher */
+    public static void dictionarySearcher() {
         try {
             System.out.print("==> Enter the English word to search: ");
             String target = Helper.readLine();
 
-            Trie.TrieNode root = new Trie.TrieNode();
-
-            ArrayList<String> keys = new ArrayList<String>();
-
-            keys = dictionary.exportAllWords();
-
-            for (int i = 0; i < keys.size(); i++) {
-                Trie.insert(keys.get(i));
-            }
-
-            if (Trie.search(target) == true) {
-                String result = "No      | English                                     | Vietnamese";
-                for (int i = 0; i < Trie.size; ++i) {
+            ArrayList<String> searchedWords = Trie.search(target);
+            if (!searchedWords.isEmpty()) {
+                String result =
+                        "No      | English                                     | Vietnamese";
+                for (int i = 0; i < searchedWords.size(); ++i) {
                     String first = String.valueOf(i + 1);
                     first += Helper.createSpacesString(8 - first.length());
-                    String second = " " + Trie.Searcher[i];
+                    String second = " " + searchedWords.get(i);
                     second += Helper.createSpacesString(45 - second.length());
-                    String third = " " + dictionary.lookUpWord(Trie.Searcher[i]);
+                    String third = " " + dictionary.lookUpWord(searchedWords.get(i));
                     result += '\n' + first + '|' + second + '|' + third;
                 }
                 System.out.println(result);
             } else {
-                System.out.println("The word you looked up isn't in the dictionary!\n");
+                System.out.println("No word starts with `" + target + "` found in the dictionary!");
             }
-            Trie.size = 0;
         } catch (NullPointerException e) {
             e.printStackTrace();
             System.out.println("An error occurred.`");
         }
-
-
     }
 
-    /**
-     * Option 9. Exit the application.
-     */
+    /** Option 9. Exit the application. */
     public static void exitApplication() {
         System.out.println("Exiting...");
         System.exit(0);
