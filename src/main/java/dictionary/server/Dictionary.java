@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Dictionary {
     public final static int WordSize = 1000000;
-    private ArrayList<Word> words;
+    private final ArrayList<Word> words;
 
     public Dictionary() {
         words = new ArrayList<Word>();
@@ -40,13 +40,14 @@ public class Dictionary {
         }
         Word w = new Word(target, definition);
         words.add(w);
+        Trie.insert(target);
         return true;
     }
 
     /**
      * Delete the word `target`.
      *
-     * @param target the delete word
+     * @param target the deleted word
      * @return true if successfully delete, false otherwise
      */
     public boolean deleteWord(final String target) {
@@ -82,7 +83,8 @@ public class Dictionary {
      * @return the resulted string
      */
     public String getAllWords() {
-        String result = "No      | English                                     | Vietnamese";
+        StringBuilder result = new StringBuilder(
+            "No      | English                                     | Vietnamese");
         for (int i = 0; i < words.size(); ++i) {
             Word w = words.get(i);
             String first = String.valueOf(i + 1);
@@ -90,17 +92,16 @@ public class Dictionary {
             String second = " " + w.getWordTarget();
             second += Helper.createSpacesString(45 - second.length());
             String third = " " + w.getWordExplain();
-            result += '\n' + first + '|' + second + '|' + third;
+            result.append('\n').append(first).append('|').append(second).append('|').append(third);
         }
-        result += '\n';
-        return result;
+        result.append('\n');
+        return result.toString();
     }
 
     public ArrayList<String> exportAllWords() {
         ArrayList<String> result = new ArrayList<String>();
 
-        for (int i = 0; i < words.size(); ++i) {
-            Word w = words.get(i);
+        for (Word w : words) {
             String target = w.getWordTarget();
             result.add(target);
         }

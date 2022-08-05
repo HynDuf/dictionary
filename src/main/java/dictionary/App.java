@@ -72,7 +72,7 @@ public class App {
                 DictionaryManagement.dictionaryExportToFile();
                 break;
             case SEARCHER:
-                DictionaryManagement.dictionarySeacher();
+                DictionaryManagement.dictionarySearcher();
                 break;
             case EXIT:
                 DictionaryManagement.exitApplication();
