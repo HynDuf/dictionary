@@ -8,7 +8,7 @@ public class Dictionary {
 
     /** Constructor. Connect to Database. */
     public Dictionary() {
-        Database.connectToDatabase();
+
     }
 
     /**
@@ -59,18 +59,19 @@ public class Dictionary {
      * @return the resulted string
      */
     public String getAllWords() {
-        String result = "No      | English                                     | Vietnamese";
+        StringBuilder result = new StringBuilder(
+            "No      | English                                               | Vietnamese");
         ArrayList<Word> words = Database.getAllWords();
         for (int i = 0; i < words.size(); ++i) {
             Word w = words.get(i);
             String first = String.valueOf(i + 1);
             first += Helper.createSpacesString(8 - first.length());
             String second = " " + w.getWordTarget();
-            second += Helper.createSpacesString(45 - second.length());
+            second += Helper.createSpacesString(55 - second.length());
             String third = " " + w.getWordExplain();
-            result += '\n' + first + '|' + second + '|' + third;
+            result.append('\n').append(first).append('|').append(second).append('|').append(third);
         }
-        result += '\n';
-        return result;
+        result.append('\n');
+        return result.toString();
     }
 }

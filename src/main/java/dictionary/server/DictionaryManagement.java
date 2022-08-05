@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class DictionaryManagement {
 
-    private static Dictionary dictionary = new Dictionary();
+    private static final Dictionary dictionary = new Dictionary();
 
     /** Option 1. Look up a word's definition. */
     public static void lookUpWord() {
@@ -70,7 +70,7 @@ public class DictionaryManagement {
     /** Option 6. Insert word from file `inputFromFile.txt`. */
     public static void insertFromFile() {
 
-        /** pass the path to the file as a parameter */
+        /* pass the path to the file as a parameter */
         File file = new File("inputFromFile.txt");
         try {
             Scanner scFile = new Scanner(file);
@@ -113,6 +113,5 @@ public class DictionaryManagement {
     /** Option 9. Exit the application. */
     public static void exitApplication() {
         System.out.println("Exiting...");
-        System.exit(0);
     }
 }

@@ -42,20 +42,19 @@ public class TranslatorApi {
     /**
      * Translate text from `langFrom` to `langTo`.
      *
-     * <p>Reference:
-     * https://stackoverflow.com/questions/8147284/how-to-use-google-translate-api-in-my-java-application
+     * <p><a
+     * href="https://stackoverflow.com/questions/8147284/how-to-use-google-translate-api-in-my-java-application">Reference</a>
      *
      * @param langFrom the input language (2 letters (ex: 'en'))
      * @param langTo the output language (2 letters (ex: 'vi'))
      * @param text the text to be translated
      * @return the translation text in `langTo`
-     * @throws IOException
      */
     private static String translate(String langFrom, String langTo, String text)
             throws IOException {
         String urlStr =
                 "https://script.google.com/macros/s/AKfycby3AOWmhe32TgV9nW-Q0TyGOEyCHQeFiIn7hRgy5m8jHPaXDl2GdToyW_3Ys5MTbK6wjg/exec"
-                    + "?q="
+                        + "?q="
                         + URLEncoder.encode(text, "UTF-8")
                         + "&target="
                         + langTo

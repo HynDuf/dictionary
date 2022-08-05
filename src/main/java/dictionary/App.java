@@ -2,6 +2,8 @@ package dictionary;
 
 import dictionary.server.DictionaryManagement;
 import dictionary.server.Helper;
+import dictionary.server.database.Database;
+import javax.xml.crypto.Data;
 
 public class App {
 
@@ -89,9 +91,12 @@ public class App {
      * @param args cmd arguments
      */
     public static void main(String[] args) {
-        while (true) {
-            int selection = displayOptions();
+        Database.connectToDatabase();
+        int selection = 0;
+        do {
+            selection = displayOptions();
             executeSelection(selection);
-        }
+        } while (selection != EXIT);
+        Database.closeDatabase();
     }
 }

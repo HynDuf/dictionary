@@ -31,6 +31,9 @@ public class Helper {
      * @return the string of `numSpaces` spaces
      */
     public static String createSpacesString(int numSpaces) {
+        if (numSpaces < 0) {
+            numSpaces = 0;
+        }
         return CharBuffer.allocate(numSpaces).toString().replace('\0', ' ');
     }
 }

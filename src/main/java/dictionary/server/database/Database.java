@@ -279,9 +279,7 @@ public class Database {
             } finally {
                 close(ps);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
