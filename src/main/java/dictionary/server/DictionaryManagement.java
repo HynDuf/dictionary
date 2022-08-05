@@ -9,20 +9,17 @@ import java.util.Scanner;
 
 public class DictionaryManagement {
 
-    private static Dictionary dictionary;
-
     public static void initialize() {
-        dictionary = new Dictionary();
-        dictionary.insertWord("hello", "xin chao");
-        dictionary.insertWord("head", "xin chao");
-        dictionary.insertWord("hi", "xin chao");
-        dictionary.insertWord("highlight", "xin chao");
-        dictionary.insertWord("happy", "xin chao");
-        dictionary.insertWord("happiness", "xin chao");
-        ArrayList<String> words = dictionary.exportAllWords();
+        Dictionary.insertWord("hello", "xin chao");
+        Dictionary.insertWord("head", "cai dau");
+        Dictionary.insertWord("hi", "xin chao ngan hon");
+        Dictionary.insertWord("highlight", "lam noi bat");
+        Dictionary.insertWord("happy", "vui ve");
+        Dictionary.insertWord("happiness", "su vui ve");
+        ArrayList<String> words = Dictionary.exportAllWords();
 
-        for (int i = 0; i < words.size(); i++) {
-            Trie.insert(words.get(i));
+        for (String word : words) {
+            Trie.insert(word);
         }
         ArrayList<String> tem = Trie.search("h");
         System.out.println("Start\n");
@@ -39,7 +36,7 @@ public class DictionaryManagement {
     public static void lookUpWord() {
         System.out.print("==> Enter the English word to look up: ");
         String target = Helper.readLine();
-        String definition = dictionary.lookUpWord(target);
+        String definition = Dictionary.lookUpWord(target);
         if (definition.equals("404")) {
             System.out.println("The word you looked up isn't in the dictionary!\n");
         } else {
@@ -49,7 +46,7 @@ public class DictionaryManagement {
 
     /** Option 2. Show all words currently in the dictionary. */
     public static void showAllWords() {
-        System.out.println(dictionary.getAllWords());
+        System.out.println(Dictionary.getAllWords());
     }
 
     /** Option 3. Add new words from the command line. */
@@ -62,7 +59,7 @@ public class DictionaryManagement {
             String target = Helper.readLine();
             System.out.print("==> Word definition: ");
             String definition = Helper.readLine();
-            if (!dictionary.insertWord(target, definition)) {
+            if (!Dictionary.insertWord(target, definition)) {
                 System.out.println("`" + target + "` already exists in the dictionary!");
             }
         }
@@ -72,7 +69,7 @@ public class DictionaryManagement {
     public static void deleteWord() {
         System.out.print("==> Enter the English word to delete: ");
         String target = Helper.readLine();
-        if (dictionary.deleteWord(target)) {
+        if (Dictionary.deleteWord(target)) {
             System.out.println("`" + target + "` successfully deleted.\n");
         } else {
             System.out.println("The word you delete isn't in the dictionary!\n");
@@ -85,7 +82,7 @@ public class DictionaryManagement {
         String target = Helper.readLine();
         System.out.print("==> Enter the new definition for `" + target + "`: ");
         String definition = Helper.readLine();
-        if (dictionary.updateWordDefinition(target, definition)) {
+        if (Dictionary.updateWordDefinition(target, definition)) {
             System.out.println("`" + target + "` successfully updated.\n");
         } else {
             System.out.println("The word you update isn't in the dictionary!\n");
@@ -95,7 +92,7 @@ public class DictionaryManagement {
     /** Option 6. Insert word from file `inputFromFile.txt` */
     public static void insertFromFile() {
 
-        /** pass the path to the file as a parameter */
+        /* pass the path to the file as a parameter */
         File file = new File("inputFromFile.txt");
         try {
             Scanner scFile = new Scanner(file);
@@ -107,7 +104,7 @@ public class DictionaryManagement {
                 }
                 String target = getLine.substring(0, pos).trim();
                 String definition = getLine.substring(pos + 1).trim();
-                dictionary.insertWord(target, definition);
+                Dictionary.insertWord(target, definition);
                 System.out.println("Inserted `" + target + "' successfully");
             }
             scFile.close();
@@ -122,7 +119,7 @@ public class DictionaryManagement {
 
         try {
             FileWriter out = new FileWriter("exportToFile.txt");
-            String export = dictionary.getAllWords();
+            String export = Dictionary.getAllWords();
             // System.out.println(export);
             out.write(export);
             out.close();
@@ -141,15 +138,17 @@ public class DictionaryManagement {
 
             ArrayList<String> searchedWords = Trie.search(target);
             if (!searchedWords.isEmpty()) {
-                String result =
-                        "No      | English                                     | Vietnamese";
+                StringBuilder result =
+                    new StringBuilder(
+                        "No      | English                                     | Vietnamese");
                 for (int i = 0; i < searchedWords.size(); ++i) {
                     String first = String.valueOf(i + 1);
                     first += Helper.createSpacesString(8 - first.length());
                     String second = " " + searchedWords.get(i);
                     second += Helper.createSpacesString(45 - second.length());
-                    String third = " " + dictionary.lookUpWord(searchedWords.get(i));
-                    result += '\n' + first + '|' + second + '|' + third;
+                    String third = " " + Dictionary.lookUpWord(searchedWords.get(i));
+                    result.append('\n').append(first).append('|').append(second).append('|')
+                        .append(third);
                 }
                 System.out.println(result);
             } else {

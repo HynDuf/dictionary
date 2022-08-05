@@ -3,12 +3,10 @@ package dictionary.server;
 import java.util.ArrayList;
 
 public class Dictionary {
-    public final static int WordSize = 1000000;
-    private ArrayList<Word> words;
+    public static final int WordSize = 1000000;
+    private static final ArrayList<Word> words = new ArrayList<>();
 
-    public Dictionary() {
-        words = new ArrayList<Word>();
-    }
+    public Dictionary() {}
 
     /**
      * Lookup the word `target` and return the corresponding definition.
@@ -16,7 +14,7 @@ public class Dictionary {
      * @param target the lookup word
      * @return the definition, if not found "404" is returned as a String.
      */
-    public String lookUpWord(final String target) {
+    public static String lookUpWord(final String target) {
         for (Word w : words) {
             if (w.getWordTarget().equals(target)) {
                 return w.getWordExplain();
@@ -32,7 +30,7 @@ public class Dictionary {
      * @param definition the definition
      * @return true if `target` hasn't been added yet, false otherwise
      */
-    public boolean insertWord(final String target, final String definition) {
+    public static boolean insertWord(final String target, final String definition) {
         for (Word w : words) {
             if (w.getWordTarget().equals(target)) {
                 return false;
@@ -49,7 +47,7 @@ public class Dictionary {
      * @param target the delete word
      * @return true if successfully delete, false otherwise
      */
-    public boolean deleteWord(final String target) {
+    public static boolean deleteWord(final String target) {
         for (int i = 0; i < words.size(); ++i) {
             if (words.get(i).getWordTarget().equals(target)) {
                 words.remove(i);
@@ -66,7 +64,7 @@ public class Dictionary {
      * @param definition the new definition
      * @return true if successfully updated, false otherwise
      */
-    public boolean updateWordDefinition(final String target, final String definition) {
+    public static boolean updateWordDefinition(final String target, final String definition) {
         for (Word w : words) {
             if (w.getWordTarget().equals(target)) {
                 w.setWordExplain(definition);
@@ -81,7 +79,7 @@ public class Dictionary {
      *
      * @return the resulted string
      */
-    public String getAllWords() {
+    public static String getAllWords() {
         String result = "No      | English                                     | Vietnamese";
         for (int i = 0; i < words.size(); ++i) {
             Word w = words.get(i);
@@ -96,16 +94,14 @@ public class Dictionary {
         return result;
     }
 
-    public ArrayList<String> exportAllWords() {
+    public static ArrayList<String> exportAllWords() {
         ArrayList<String> result = new ArrayList<String>();
 
-        for (int i = 0; i < words.size(); ++i) {
-            Word w = words.get(i);
+        for (Word w : words) {
             String target = w.getWordTarget();
             result.add(target);
         }
 
         return result;
     }
-
 }

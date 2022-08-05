@@ -1,6 +1,7 @@
 package dictionary;
 
 import dictionary.server.DictionaryManagement;
+import java.util.Objects;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +25,8 @@ public class App extends Application {
         try {
             Parent root =
                     FXMLLoader.load(
-                            getClass().getClassLoader().getResource("fxml/Application.fxml"));
+                        Objects.requireNonNull(
+                            getClass().getClassLoader().getResource("fxml/Application.fxml")));
             Scene scene = new Scene(root, 900, 650);
             primaryStage.setScene(scene);
             primaryStage.show();

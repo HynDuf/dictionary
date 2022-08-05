@@ -51,7 +51,7 @@ public class Trie {
     }
 
     private static void dfs(TrieNode pCrawl, String key) {
-        if (pCrawl.isEndOfWord == true) {
+        if (pCrawl.isEndOfWord) {
             searchedWords.add(key);
         }
         for (int i = 0; i < 26; ++i) {

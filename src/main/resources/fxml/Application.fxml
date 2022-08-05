@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
-    <children>
-        <TextField fx:id="inputWord" layoutX="80.0" layoutY="80.0" onKeyTyped="#searchWord" prefHeight="30.0" prefWidth="130.0" promptText="Tìm kiếm"/>
-        <ListView fx:id="searchList" layoutX="80.0" layoutY="120.0" prefHeight="300.0" prefWidth="130.0"/>
-    </children>
+<AnchorPane prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
+  <TextField fx:id="inputText" layoutX="34.0" layoutY="73.0" onAction="#lookUpWord" onKeyTyped="#searchWord" prefHeight="41.0" prefWidth="242.0" promptText="Tìm kiếm" />
+  <ListView fx:id="searchList" layoutX="33.0" layoutY="120.0" onKeyPressed="#selectWord" prefHeight="485.0" prefWidth="241.0" />
+  <ScrollPane layoutX="286.0" layoutY="72.0" prefHeight="533.0" prefWidth="577.0">
+    <VBox fx:id="definitionBox" layoutX="200.0" layoutY="200.0" prefHeight="538.0" prefWidth="456.0" />
+  </ScrollPane>
 </AnchorPane>
