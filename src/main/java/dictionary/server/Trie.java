@@ -1,10 +1,10 @@
 package dictionary.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Trie {
     // Alphabet size (# of symbols)
-    private static final int ALPHABET_SIZE = 26;
 
     private static final ArrayList<String> searchedWords = new ArrayList<>();
 
@@ -15,7 +15,7 @@ public class Trie {
 
     // trie node
     public static class TrieNode {
-        TrieNode[] children = new TrieNode[ALPHABET_SIZE];
+        HashMap<Character, TrieNode> children = new HashMap<Character, TrieNode>();
 
         // isEndOfWord is true if the node represents
         // end of a word
@@ -23,7 +23,7 @@ public class Trie {
 
         TrieNode() {
             isEndOfWord = false;
-            for (int i = 0; i < ALPHABET_SIZE; i++) children[i] = null;
+            children.clear();
         }
     }
 
@@ -35,15 +35,16 @@ public class Trie {
     public static void insert(String key) {
         int level;
         int length = key.length();
-        int index;
+        char index;
 
         TrieNode pCrawl = root;
 
         for (level = 0; level < length; level++) {
-            index = key.charAt(level) - 'a';
-            if (pCrawl.children[index] == null) pCrawl.children[index] = new TrieNode();
+            index = key.charAt(level);
+            if (pCrawl.children.get(index) == null)
+                pCrawl.children.put(index, new TrieNode());
 
-            pCrawl = pCrawl.children[index];
+            pCrawl = pCrawl.children.get(index);
         }
 
         // mark last node as leaf
@@ -54,9 +55,9 @@ public class Trie {
         if (pCrawl.isEndOfWord) {
             searchedWords.add(key);
         }
-        for (int i = 0; i < 26; ++i) {
-            if (pCrawl.children[i] != null) {
-                dfs(pCrawl.children[i], key + (char) (i + 'a'));
+        for (char index : pCrawl.children.keySet()) {
+            if (pCrawl.children.get(index) != null) {
+                dfs(pCrawl.children.get(index), key + index);
             }
         }
     }
@@ -68,13 +69,13 @@ public class Trie {
         TrieNode pCrawl = root;
 
         for (int level = 0; level < length; level++) {
-            int index = key.charAt(level) - 'a';
+            char index = key.charAt(level);
 
-            if (pCrawl.children[index] == null) {
+            if (pCrawl.children.get(index) == null) {
                 return getSearchedWords();
             }
 
-            pCrawl = pCrawl.children[index];
+            pCrawl = pCrawl.children.get(index);
         }
         dfs(pCrawl, key);
         return getSearchedWords();
