@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Trie {
-    // Alphabet size (# of symbols)
 
     private static final ArrayList<String> searchedWords = new ArrayList<>();
 
@@ -16,6 +15,10 @@ public class Trie {
     // trie node
     public static class TrieNode {
         HashMap<Character, TrieNode> children = new HashMap<Character, TrieNode>();
+
+        public HashMap<Character, TrieNode> getChildren() {
+            return children;
+        }
 
         // isEndOfWord is true if the node represents
         // end of a word
@@ -49,6 +52,16 @@ public class Trie {
 
         // mark last node as leaf
         pCrawl.isEndOfWord = true;
+    }
+    /** Delete a node (if this node.children is empty) */
+    public void deleteNode(TrieNode node) {
+        if(node == null){
+            return;
+        }
+
+        if(node.getChildren().isEmpty()) {
+            node = null;
+        }
     }
 
     private static void dfs(TrieNode pCrawl, String key) {
