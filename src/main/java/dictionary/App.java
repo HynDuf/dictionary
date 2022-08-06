@@ -3,12 +3,28 @@ package dictionary;
 import dictionary.server.DictionaryManagement;
 import dictionary.server.Helper;
 import dictionary.server.database.Database;
-import javax.xml.crypto.Data;
 
 public class App {
 
+    public static void databaseOption() {
+        while (true) {
+            System.out.print(
+                    "Do you want to use SQL Database? (Requires Database already set up)\n"
+                            + "==> Option [y(es)/n(o)]: ");
+            String option = Helper.readLine();
+            if (option.equals("y") || option.equals("yes")) {
+                DictionaryManagement.setUpDatabase();
+                return;
+            } else if (option.equals("n") || option.equals("no")) {
+                return;
+            } else {
+                System.out.println("Invalid option!\nPlease type `y` for yes and `n` for no.");
+            }
+        }
+    }
+
     private static final int LOOK_UP = 1;
-    private static final int SHOW_ALL = 2;
+    private static final int DISPLAY_WORDS = 2;
     private static final int INSERT_CMD = 3;
     private static final int DELETE = 4;
     private static final int UPDATE = 5;
@@ -26,7 +42,7 @@ public class App {
         while (true) {
             System.out.println("Choose an option to proceed:");
             System.out.println("1. Look up word");
-            System.out.println("2. Show all words");
+            System.out.println("2. Display words");
             System.out.println("3. Insert words");
             System.out.println("4. Delete a word");
             System.out.println("5. Update a word's definition");
@@ -34,11 +50,11 @@ public class App {
             System.out.println("7. Translate English text to Vietnamese");
             System.out.println("8. Text to Speech an English text");
             System.out.println("9. Exit");
-            System.out.print("==> Enter a selection (1-9): ");
-            int selection = Helper.readInteger();
+            System.out.print("==> Enter an option (1-9): ");
+            int option = Helper.readInteger();
             Helper.readLine();
-            if (1 <= selection && selection <= 9) {
-                return selection;
+            if (1 <= option && option <= 9) {
+                return option;
             } else {
                 System.out.println("Invalid option!");
             }
@@ -46,17 +62,17 @@ public class App {
     }
 
     /**
-     * Execute the chosen selection.
+     * Execute the chosen option.
      *
-     * @param selection the chosen selection
+     * @param option the chosen option
      */
-    public static void executeSelection(int selection) {
-        switch (selection) {
+    public static void executeSelection(int option) {
+        switch (option) {
             case LOOK_UP:
                 DictionaryManagement.lookUpWord();
                 break;
-            case SHOW_ALL:
-                DictionaryManagement.showAllWords();
+            case DISPLAY_WORDS:
+                DictionaryManagement.showWords();
                 break;
             case INSERT_CMD:
                 DictionaryManagement.insertFromCommandline();
@@ -91,12 +107,12 @@ public class App {
      * @param args cmd arguments
      */
     public static void main(String[] args) {
-        Database.connectToDatabase();
-        int selection = 0;
+        databaseOption();
+        int option = 0;
         do {
-            selection = displayOptions();
-            executeSelection(selection);
-        } while (selection != EXIT);
+            option = displayOptions();
+            executeSelection(option);
+        } while (option != EXIT);
         Database.closeDatabase();
     }
 }

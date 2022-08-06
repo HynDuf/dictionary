@@ -24,21 +24,31 @@ public class Database {
     private static Connection connection = null;
 
     /**
+     * Database is already connected or not.
+     *
+     * @return true if Database is already connected, false otherwise
+     */
+    public static boolean isConnected() {
+        return connection != null;
+    }
+
+    /**
      * Connect to MYSQL database.
      *
      * <p>Reference: https://stackoverflow.com/questions/2839321/connect-java-to-a-mysql-database
      */
     public static void connectToDatabase() {
-        System.out.println("Connecting database...");
+        System.out.println("Connecting to database...");
         try {
             connection = DriverManager.getConnection(MYSQL_URL, USER_NAME, PASSWORD);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Database connected!");
+        System.out.println("Database connected!\n");
     }
 
+    /** Close the Database connection. */
     public static void closeDatabase() {
         close(connection);
         System.out.println("Database disconnected!");
@@ -137,12 +147,6 @@ public class Database {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
                 // `word` is already in database
-                // System.out.println(
-                //         "Cannot insert `"
-                //                 + target
-                //                 + "` to dictionary as `"
-                //                 + target
-                //                 + "` is already in the database!");
                 return false;
             } finally {
                 close(ps);
@@ -218,6 +222,40 @@ public class Database {
         final String SQL_QUERY = "SELECT * FROM dictionary";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
+            try {
+                ResultSet rs = ps.executeQuery();
+                try {
+                    ArrayList<Word> words = new ArrayList<Word>();
+                    while (rs.next()) {
+                        words.add(new Word(rs.getString(2), rs.getString(3)));
+                    }
+                    return words;
+
+                } finally {
+                    close(rs);
+                }
+            } finally {
+                close(ps);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<Word>();
+    }
+
+    /**
+     * Get all the words from the Database has `id` from `wordIndexFrom` to `wordIndexTo`.
+     *
+     * @param wordIndexFrom left bound
+     * @param wordIndexTo right bound
+     * @return an ArrayList of Word get from the database
+     */
+    public static ArrayList<Word> getWordsPartial(int wordIndexFrom, int wordIndexTo) {
+        final String SQL_QUERY = "SELECT * FROM dictionary WHERE id >= ? AND id <= ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
+            ps.setInt(1, wordIndexFrom);
+            ps.setInt(2, wordIndexTo);
             try {
                 ResultSet rs = ps.executeQuery();
                 try {

@@ -5,10 +5,25 @@ import dictionary.server.database.Database;
 import java.util.ArrayList;
 
 public class Dictionary {
+    private final ArrayList<Word> words = new ArrayList<>();
+    private int numWords = 0;
 
-    /** Constructor. Connect to Database. */
-    public Dictionary() {
+    /**
+     * Getter for numWords.
+     *
+     * @return number of words in the dictionary
+     */
+    public int getNumWords() {
+        return numWords;
+    }
 
+    /**
+     * Setter for numWords.
+     *
+     * @param numWords number of words
+     */
+    public void setNumWords(int numWords) {
+        this.numWords = numWords;
     }
 
     /**
@@ -18,7 +33,16 @@ public class Dictionary {
      * @return the definition, if not found "404" is returned as a String.
      */
     public String lookUpWord(final String target) {
-        return Database.lookUpWord(target);
+        if (Database.isConnected()) {
+            return Database.lookUpWord(target);
+        } else {
+            for (Word w : words) {
+                if (w.getWordTarget().equals(target)) {
+                    return w.getWordExplain();
+                }
+            }
+            return "404";
+        }
     }
 
     /**
@@ -29,7 +53,23 @@ public class Dictionary {
      * @return true if `target` hasn't been added yet, false otherwise
      */
     public boolean insertWord(final String target, final String definition) {
-        return Database.insertWord(target, definition);
+        if (Database.isConnected()) {
+            if (Database.insertWord(target, definition)) {
+                numWords++;
+                return true;
+            }
+            return false;
+        } else {
+            for (Word w : words) {
+                if (w.getWordTarget().equals(target)) {
+                    return false;
+                }
+            }
+            Word w = new Word(target, definition);
+            words.add(w);
+            numWords++;
+            return true;
+        }
     }
 
     /**
@@ -39,7 +79,22 @@ public class Dictionary {
      * @return true if successfully delete, false otherwise
      */
     public boolean deleteWord(final String target) {
-        return Database.deleteWord(target);
+        if (Database.isConnected()) {
+            if (Database.deleteWord(target)) {
+                numWords--;
+                return true;
+            }
+            return false;
+        } else {
+            for (int i = 0; i < words.size(); ++i) {
+                if (words.get(i).getWordTarget().equals(target)) {
+                    words.remove(i);
+                    numWords--;
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /**
@@ -50,21 +105,33 @@ public class Dictionary {
      * @return true if successfully updated, false otherwise
      */
     public boolean updateWordDefinition(final String target, final String definition) {
-        return Database.updateWordDefinition(target, definition);
+        if (Database.isConnected()) {
+            return Database.updateWordDefinition(target, definition);
+        } else {
+            for (Word w : words) {
+                if (w.getWordTarget().equals(target)) {
+                    w.setWordExplain(definition);
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /**
-     * Get all the words in the dictionary into a string.
+     * Format words in `wordsList` into a visual table in String format.
      *
-     * @return the resulted string
+     * @param wordsList list of words
+     * @return the visual table in String format
      */
-    public String getAllWords() {
-        StringBuilder result = new StringBuilder(
-            "No      | English                                               | Vietnamese");
-        ArrayList<Word> words = Database.getAllWords();
-        for (int i = 0; i < words.size(); ++i) {
-            Word w = words.get(i);
-            String first = String.valueOf(i + 1);
+    public String printWordsTable(ArrayList<Word> wordsList, int startIndex) {
+        StringBuilder result =
+                new StringBuilder(
+                        "No      | English                                               |"
+                                + " Vietnamese");
+        for (int i = 0; i < wordsList.size(); ++i) {
+            Word w = wordsList.get(i);
+            String first = String.valueOf(i + startIndex);
             first += Helper.createSpacesString(8 - first.length());
             String second = " " + w.getWordTarget();
             second += Helper.createSpacesString(55 - second.length());
@@ -73,5 +140,39 @@ public class Dictionary {
         }
         result.append('\n');
         return result.toString();
+    }
+
+    /**
+     * Get all the words in the dictionary into a string. Organized into a String table.
+     *
+     * @return the resulted string
+     */
+    public String getAllWords() {
+        ArrayList<Word> allWords;
+        if (Database.isConnected()) {
+            allWords = Database.getAllWords();
+        } else {
+            allWords = words;
+        }
+        return printWordsTable(allWords, 1);
+    }
+
+    /**
+     * Get words have index from `wordIndexFrom` to `wordIndexTo`. Organized into a String table.
+     *
+     * @param wordIndexFrom left bound
+     * @param wordIndexTo right bound
+     * @return the resulted String
+     */
+    public String getWordsPartial(int wordIndexFrom, int wordIndexTo) {
+        ArrayList<Word> wordsList = new ArrayList<>();
+        if (Database.isConnected()) {
+            wordsList = Database.getWordsPartial(wordIndexFrom, wordIndexTo);
+        } else {
+            for (int i = wordIndexFrom - 1; i < wordIndexTo; i++) {
+                wordsList.add(words.get(i));
+            }
+        }
+        return printWordsTable(wordsList, wordIndexFrom);
     }
 }
