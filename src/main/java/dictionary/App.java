@@ -6,6 +6,18 @@ import dictionary.server.database.Database;
 
 public class App {
 
+    private static final int LOOK_UP = 1;
+    private static final int DISPLAY_WORDS = 2;
+    private static final int INSERT_CMD = 3;
+    private static final int DELETE = 4;
+    private static final int UPDATE = 5;
+    private static final int INSERT_FILE = 6;
+    private static final int SEARCH = 7;
+    private static final int TRANSLATE_E_V = 8;
+    private static final int TEXT_TO_SPEECH = 9;
+    private static final int EXPORT_FILE = 10;
+    private static final int EXIT = 11;
+
     public static void databaseOption() {
         while (true) {
             System.out.print(
@@ -22,18 +34,6 @@ public class App {
             }
         }
     }
-
-    private static final int LOOK_UP = 1;
-    private static final int DISPLAY_WORDS = 2;
-    private static final int INSERT_CMD = 3;
-    private static final int DELETE = 4;
-    private static final int UPDATE = 5;
-    private static final int INSERT_FILE = 6;
-    private static final int SEARCH = 7;
-    private static final int TRANSLATE_E_V = 8;
-    private static final int TEXT_TO_SPEECH = 9;
-    private static final int EXPORT_FILE = 10;
-    private static final int EXIT = 11;
 
     /**
      * Display options for the commandline application.
@@ -112,8 +112,8 @@ public class App {
     }
 
     /**
-             * The main application flow.
-             *
+     * The main application flow.
+     *
      * @param args cmd arguments
      */
     public static void main(String[] args) {

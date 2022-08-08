@@ -1,13 +1,12 @@
 package dictionary.server;
 
+import java.nio.CharBuffer;
+import java.util.Scanner;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-
-import java.nio.CharBuffer;
-import java.util.Scanner;
 
 public class Helper {
     private static final Scanner sc = new Scanner(System.in);
@@ -72,8 +71,8 @@ public class Helper {
     /**
      * Build the plain text from Jsoup nodes.
      *
-     * <p>Reference:
-     * <a href="https://stackoverflow.com/questions/2513707/how-to-convert-html-to-text-keeping-linebreaks">...</a>
+     * <p>Reference: <a
+     * href="https://stackoverflow.com/questions/2513707/how-to-convert-html-to-text-keeping-linebreaks">...</a>
      *
      * @param node Jsoup nodes
      * @return StringBuffer
