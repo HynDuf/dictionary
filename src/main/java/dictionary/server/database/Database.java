@@ -1,7 +1,6 @@
 package dictionary.server.database;
 
 import dictionary.server.Word;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -158,11 +157,11 @@ public class Database {
     }
 
     /**
-     * Delete the word `targe` from the database.
+     * Delete the word `target` from the database.
      *
      * <p>Nothing happens if `target` is not in the database for deletion.
      *
-     * @param target the delete word
+     * @param target the deleted word
      * @return true if successfully delete, false otherwise
      */
     public static boolean deleteWord(final String target) {
@@ -214,6 +213,31 @@ public class Database {
     }
 
     /**
+     * Get all words from result set of the given SQL query.
+     *
+     * @param ps the SQL query included in PreparedStatement
+     * @return ArrayList of Words
+     * @throws SQLException exception
+     */
+    private static ArrayList<Word> getWordsFromResultSet(PreparedStatement ps) throws SQLException {
+        try {
+            ResultSet rs = ps.executeQuery();
+            try {
+                ArrayList<Word> words = new ArrayList<>();
+                while (rs.next()) {
+                    words.add(new Word(rs.getString(2), rs.getString(3)));
+                }
+                return words;
+
+            } finally {
+                close(rs);
+            }
+        } finally {
+            close(ps);
+        }
+    }
+
+    /**
      * Get all words into an `ArrayList(Word)>`.
      *
      * @return an 'ArrayList(Word)' include all the words from the database
@@ -222,25 +246,11 @@ public class Database {
         final String SQL_QUERY = "SELECT * FROM dictionary";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
-            try {
-                ResultSet rs = ps.executeQuery();
-                try {
-                    ArrayList<Word> words = new ArrayList<Word>();
-                    while (rs.next()) {
-                        words.add(new Word(rs.getString(2), rs.getString(3)));
-                    }
-                    return words;
-
-                } finally {
-                    close(rs);
-                }
-            } finally {
-                close(ps);
-            }
+            return getWordsFromResultSet(ps);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ArrayList<Word>();
+        return new ArrayList<>();
     }
 
     /**
@@ -256,14 +266,30 @@ public class Database {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
             ps.setInt(1, wordIndexFrom);
             ps.setInt(2, wordIndexTo);
+            return getWordsFromResultSet(ps);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * Get all words target from the database (only target, non include the definition).
+     *
+     * @return ArrayList of string of words target
+     */
+    public static ArrayList<String> getAllWordsTarget() {
+        final String SQL_QUERY = "SELECT * FROM dictionary";
+        try {
+            PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
             try {
                 ResultSet rs = ps.executeQuery();
                 try {
-                    ArrayList<Word> words = new ArrayList<Word>();
+                    ArrayList<String> targets = new ArrayList<>();
                     while (rs.next()) {
-                        words.add(new Word(rs.getString(2), rs.getString(3)));
+                        targets.add(rs.getString(2));
                     }
-                    return words;
+                    return targets;
 
                 } finally {
                     close(rs);
@@ -274,7 +300,7 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ArrayList<Word>();
+        return new ArrayList<>();
     }
 
     /**

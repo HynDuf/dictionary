@@ -10,7 +10,7 @@ import java.nio.CharBuffer;
 import java.util.Scanner;
 
 public class Helper {
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
 
     /**
      * Read the next integer.
@@ -73,7 +73,7 @@ public class Helper {
      * Build the plain text from Jsoup nodes.
      *
      * <p>Reference:
-     * https://stackoverflow.com/questions/2513707/how-to-convert-html-to-text-keeping-linebreaks
+     * <a href="https://stackoverflow.com/questions/2513707/how-to-convert-html-to-text-keeping-linebreaks">...</a>
      *
      * @param node Jsoup nodes
      * @return StringBuffer

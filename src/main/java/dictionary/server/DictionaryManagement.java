@@ -2,19 +2,26 @@ package dictionary.server;
 
 import dictionary.server.database.Database;
 import dictionary.server.google_translate_api.TranslatorApi;
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DictionaryManagement {
 
     private static final Dictionary dictionary = new Dictionary();
+    private static final int WORDS_PER_PAGE = 10;
 
     /** Set up Database. */
     public static void setUpDatabase() {
         Database.connectToDatabase();
         dictionary.setNumWords(138481);
+        ArrayList<String> targets = Database.getAllWordsTarget();
+        for (String word : targets) {
+            Trie.insert(word);
+        }
     }
 
     /** Option 1. Look up a word's definition. */
@@ -67,8 +74,6 @@ public class DictionaryManagement {
         }
     }
 
-    private static final int WORDS_PER_PAGE = 10;
-
     /** Show max of `WORDS_PER_PAGE` each time. Can change the active page interactively. */
     public static void showWordsPartial() {
         int numberOfPages = (dictionary.getNumWords() + WORDS_PER_PAGE - 1) / WORDS_PER_PAGE;
@@ -88,32 +93,36 @@ public class DictionaryManagement {
                             + " words in total");
             System.out.print(
                     "==> Enter `l/r/q/<PAGE_NUMBER>` for `page before/page after/quit/jump to"
-                        + " <PAGE_NUMBER>`: ");
+                            + " <PAGE_NUMBER>`: ");
             String option = Helper.readLine();
-            if (option.equals("l")) {
-                if (curPageIndex > 1) {
-                    curPageIndex--;
-                    curWordIndex -= WORDS_PER_PAGE;
-                }
-            } else if (option.equals("r")) {
-                if (curPageIndex < numberOfPages) {
-                    curPageIndex++;
-                    curWordIndex += WORDS_PER_PAGE;
-                }
-            } else if (option.equals("q")) {
-                return;
-            } else {
-                try {
-                    int pageIndex = Integer.parseInt(option);
-                    if (1 <= pageIndex && pageIndex <= numberOfPages) {
-                        curPageIndex = pageIndex;
-                        curWordIndex = (curPageIndex - 1) * WORDS_PER_PAGE + 1;
-                    } else {
-                        System.out.println("Invalid page number!");
+            switch (option) {
+                case "l":
+                    if (curPageIndex > 1) {
+                        curPageIndex--;
+                        curWordIndex -= WORDS_PER_PAGE;
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid option!");
-                }
+                    break;
+                case "r":
+                    if (curPageIndex < numberOfPages) {
+                        curPageIndex++;
+                        curWordIndex += WORDS_PER_PAGE;
+                    }
+                    break;
+                case "q":
+                    return;
+                default:
+                    try {
+                        int pageIndex = Integer.parseInt(option);
+                        if (1 <= pageIndex && pageIndex <= numberOfPages) {
+                            curPageIndex = pageIndex;
+                            curWordIndex = (curPageIndex - 1) * WORDS_PER_PAGE + 1;
+                        } else {
+                            System.out.println("Invalid page number!");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid option!");
+                    }
+                    break;
             }
         }
     }
@@ -192,7 +201,41 @@ public class DictionaryManagement {
         Helper.pressEnterToContinue();
     }
 
-    /** Option 7. Translate English text to Vietnamese Text with GooogleTranslateAPI. */
+    /** Option 7. Search and list all the words start with a certain text */
+    public static void searchWords() {
+        try {
+            System.out.print("==> Enter the prefix to search: ");
+            String target = Helper.readLine();
+
+            ArrayList<String> searchedWords = Trie.search(target);
+            if (!searchedWords.isEmpty()) {
+                StringBuilder result =
+                        new StringBuilder(
+                                "No      | English                                     | Vietnamese");
+                for (int i = 0; i < searchedWords.size(); ++i) {
+                    String first = String.valueOf(i + 1);
+                    first += Helper.createSpacesString(8 - first.length());
+                    String second = " " + searchedWords.get(i);
+                    second += Helper.createSpacesString(55 - second.length());
+                    String third = " " + dictionary.lookUpWord(searchedWords.get(i));
+                    result.append('\n')
+                            .append(first)
+                            .append('|')
+                            .append(second)
+                            .append('|')
+                            .append(third);
+                }
+                System.out.println(result);
+            } else {
+                System.out.println("No word starts with `" + target + "` found in the dictionary!");
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("An error occurred.`");
+        }
+    }
+
+    /** Option 8. Translate English text to Vietnamese Text with GoogleTranslateAPI. */
     public static void translateEnToVi() {
         System.out.print("==> Enter the English text you want to translate: ");
         String text = Helper.readLine();
@@ -203,7 +246,7 @@ public class DictionaryManagement {
         Helper.pressEnterToContinue();
     }
 
-    /** Option 8. Text to Speech, speaking English text in English. */
+    /** Option 9. Text to Speech, speaking English text in English. */
     public static void textToSpeech() {
         System.out.print("==> Enter the English text you want to listen to: ");
         String text = Helper.readLine();
@@ -211,7 +254,22 @@ public class DictionaryManagement {
         Helper.pressEnterToContinue();
     }
 
-    /** Option 9. Exit the application. */
+    /** Option 10. Export to file */
+    public static void dictionaryExportToFile() {
+        try {
+            FileWriter out = new FileWriter("exportToFile.txt");
+            String export = dictionary.getAllWords();
+            // System.out.println(export);
+            out.write(export);
+            out.close();
+            System.out.println("Exported successfully");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("An error occurred.`");
+        }
+    }
+
+    /** Option 11. Exit the application. */
     public static void exitApplication() {
         System.out.println("Exiting...");
     }

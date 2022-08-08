@@ -29,14 +29,16 @@ public class App {
     private static final int DELETE = 4;
     private static final int UPDATE = 5;
     private static final int INSERT_FILE = 6;
-    private static final int TRANSLATE_E_V = 7;
-    private static final int TEXT_TO_SPEECH = 8;
-    private static final int EXIT = 9;
+    private static final int SEARCH = 7;
+    private static final int TRANSLATE_E_V = 8;
+    private static final int TEXT_TO_SPEECH = 9;
+    private static final int EXPORT_FILE = 10;
+    private static final int EXIT = 11;
 
     /**
      * Display options for the commandline application.
      *
-     * @return the selected options (from 1 to 7)
+     * @return the selected options (from 1 to 11)
      */
     public static int displayOptions() {
         while (true) {
@@ -47,13 +49,15 @@ public class App {
             System.out.println("4. Delete a word");
             System.out.println("5. Update a word's definition");
             System.out.println("6. Insert from file");
-            System.out.println("7. Translate English text to Vietnamese");
-            System.out.println("8. Text to Speech an English text");
-            System.out.println("9. Exit");
-            System.out.print("==> Enter an option (1-9): ");
+            System.out.println("7. Search words (prefix matching)");
+            System.out.println("8. Translate English text to Vietnamese");
+            System.out.println("9. Text to Speech an English text");
+            System.out.println("10. Export to file");
+            System.out.println("11. Exit");
+            System.out.print("==> Enter an option (1-11): ");
             int option = Helper.readInteger();
             Helper.readLine();
-            if (1 <= option && option <= 9) {
+            if (1 <= option && option <= 11) {
                 return option;
             } else {
                 System.out.println("Invalid option!");
@@ -86,11 +90,17 @@ public class App {
             case INSERT_FILE:
                 DictionaryManagement.insertFromFile();
                 break;
+            case SEARCH:
+                DictionaryManagement.searchWords();
+                break;
             case TRANSLATE_E_V:
                 DictionaryManagement.translateEnToVi();
                 break;
             case TEXT_TO_SPEECH:
                 DictionaryManagement.textToSpeech();
+                break;
+            case EXPORT_FILE:
+                DictionaryManagement.dictionaryExportToFile();
                 break;
             case EXIT:
                 DictionaryManagement.exitApplication();
@@ -102,13 +112,13 @@ public class App {
     }
 
     /**
-     * The main application flow.
-     *
+             * The main application flow.
+             *
      * @param args cmd arguments
      */
     public static void main(String[] args) {
         databaseOption();
-        int option = 0;
+        int option;
         do {
             option = displayOptions();
             executeSelection(option);

@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 public class TranslatorApi {
 
     /**
-     * Transalte English text `text` into Vietnamese.
+     * Translate English text `text` into Vietnamese.
      *
      * @param text the text to be translated
      * @return the Vietnamese translation, or "500" if got errors
@@ -25,7 +25,7 @@ public class TranslatorApi {
     }
 
     /**
-     * Transalte Vietnamese text `text` into English.
+     * Translate Vietnamese text `text` into English.
      *
      * @param text the text to be translated
      * @return the English translation, or "500" if got errors

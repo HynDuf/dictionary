@@ -1,7 +1,6 @@
 package dictionary.server;
 
 import dictionary.server.database.Database;
-
 import java.util.ArrayList;
 
 public class Dictionary {
@@ -56,6 +55,7 @@ public class Dictionary {
         if (Database.isConnected()) {
             if (Database.insertWord(target, definition)) {
                 numWords++;
+                Trie.insert(target);
                 return true;
             }
             return false;
@@ -67,6 +67,7 @@ public class Dictionary {
             }
             Word w = new Word(target, definition);
             words.add(w);
+            Trie.insert(target);
             numWords++;
             return true;
         }
@@ -75,26 +76,27 @@ public class Dictionary {
     /**
      * Delete the word `target`.
      *
-     * @param target the delete word
+     * @param target the deleted word
      * @return true if successfully delete, false otherwise
      */
     public boolean deleteWord(final String target) {
         if (Database.isConnected()) {
             if (Database.deleteWord(target)) {
                 numWords--;
+                Trie.delete(target);
                 return true;
             }
-            return false;
         } else {
             for (int i = 0; i < words.size(); ++i) {
                 if (words.get(i).getWordTarget().equals(target)) {
                     words.remove(i);
                     numWords--;
+                    Trie.delete(target);
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     }
 
     /**
@@ -158,7 +160,7 @@ public class Dictionary {
     }
 
     /**
-     * Get words have index from `wordIndexFrom` to `wordIndexTo`. Organized into a String table.
+     * Get words have indices from `wordIndexFrom` to `wordIndexTo`. Organized into a String table.
      *
      * @param wordIndexFrom left bound
      * @param wordIndexTo right bound
@@ -174,5 +176,21 @@ public class Dictionary {
             }
         }
         return printWordsTable(wordsList, wordIndexFrom);
+    }
+
+    /**
+     * Export all English words in the dictionary into an ArrayList of String.
+     *
+     * @return ArrayList of String of all words
+     */
+    public ArrayList<String> exportAllWords() {
+        ArrayList<String> result = new ArrayList<>();
+
+        for (Word w : words) {
+            String target = w.getWordTarget();
+            result.add(target);
+        }
+
+        return result;
     }
 }
