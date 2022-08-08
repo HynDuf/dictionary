@@ -8,6 +8,19 @@ public class Dictionary {
     private int numWords = 0;
 
     /**
+     * Get all words in the dictionary.
+     *
+     * @return ArrayList of Word
+     */
+    public ArrayList<Word> getWords() {
+        if (Database.isConnected()) {
+            return Database.getAllWords();
+        } else {
+            return words;
+        }
+    }
+
+    /**
      * Getter for numWords.
      *
      * @return number of words in the dictionary
@@ -126,14 +139,14 @@ public class Dictionary {
      * @param wordsList list of words
      * @return the visual table in String format
      */
-    public String printWordsTable(ArrayList<Word> wordsList, int startIndex) {
+    public String printWordsTable(ArrayList<Word> wordsList, int startIndex, int endIndex) {
         StringBuilder result =
                 new StringBuilder(
                         "No      | English                                               |"
                                 + " Vietnamese");
-        for (int i = 0; i < wordsList.size(); ++i) {
+        for (int i = startIndex - 1; i < endIndex; ++i) {
             Word w = wordsList.get(i);
-            String first = String.valueOf(i + startIndex);
+            String first = String.valueOf(i + 1);
             first += Helper.createSpacesString(8 - first.length());
             String second = " " + w.getWordTarget();
             second += Helper.createSpacesString(55 - second.length());
@@ -149,33 +162,23 @@ public class Dictionary {
      *
      * @return the resulted string
      */
-    public String getAllWords() {
-        ArrayList<Word> allWords;
-        if (Database.isConnected()) {
-            allWords = Database.getAllWords();
-        } else {
-            allWords = words;
-        }
-        return printWordsTable(allWords, 1);
+    public String displayAllWords() {
+        ArrayList<Word> allWords = getWords();
+        return printWordsTable(allWords, 1, allWords.size());
     }
 
     /**
-     * Get words have indices from `wordIndexFrom` to `wordIndexTo`. Organized into a String table.
+     * Fill with the definition of English words in `targets`.
      *
-     * @param wordIndexFrom left bound
-     * @param wordIndexTo right bound
-     * @return the resulted String
+     * @param targets the words to find definition
+     * @return ArrayList of Word
      */
-    public String getWordsPartial(int wordIndexFrom, int wordIndexTo) {
-        ArrayList<Word> wordsList = new ArrayList<>();
-        if (Database.isConnected()) {
-            wordsList = Database.getWordsPartial(wordIndexFrom, wordIndexTo);
-        } else {
-            for (int i = wordIndexFrom - 1; i < wordIndexTo; i++) {
-                wordsList.add(words.get(i));
-            }
+    public ArrayList<Word> fillDefinition(ArrayList<String> targets) {
+        ArrayList<Word> res = new ArrayList<>();
+        for (String target : targets) {
+            res.add(new Word(target, lookUpWord(target)));
         }
-        return printWordsTable(wordsList, wordIndexFrom);
+        return res;
     }
 
     /**

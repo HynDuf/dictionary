@@ -62,11 +62,11 @@ public class DictionaryManagement {
             int selection = Helper.readInteger();
             Helper.readLine();
             if (selection == 1) {
-                System.out.println(dictionary.getAllWords());
+                System.out.println(dictionary.displayAllWords());
                 Helper.pressEnterToContinue();
                 return;
             } else if (selection == 2) {
-                showWordsPartial();
+                showAllWordsPartial();
                 return;
             } else {
                 System.out.println("Invalid option!");
@@ -75,13 +75,23 @@ public class DictionaryManagement {
     }
 
     /** Show max of `WORDS_PER_PAGE` each time. Can change the active page interactively. */
-    public static void showWordsPartial() {
-        int numberOfPages = (dictionary.getNumWords() + WORDS_PER_PAGE - 1) / WORDS_PER_PAGE;
+    public static void showAllWordsPartial() {
+        ArrayList<Word> wordsList = dictionary.getWords();
+        showWordsPartial(wordsList);
+    }
+
+    /**
+     * Show all the words in `wordsList` partially (max `WORDS_PER_PAGE` words per page).
+     *
+     * @param wordsList the list of words to show
+     */
+    public static void showWordsPartial(ArrayList<Word> wordsList) {
+        int numberOfPages = (wordsList.size() + WORDS_PER_PAGE - 1) / WORDS_PER_PAGE;
         int curWordIndex = 1;
         int curPageIndex = 1;
         while (true) {
-            int toWordIndex = Math.min(curWordIndex + WORDS_PER_PAGE - 1, dictionary.getNumWords());
-            System.out.println(dictionary.getWordsPartial(curWordIndex, toWordIndex));
+            int toWordIndex = Math.min(curWordIndex + WORDS_PER_PAGE - 1, wordsList.size());
+            System.out.println(dictionary.printWordsTable(wordsList, curWordIndex, toWordIndex));
             System.out.println("Page " + curPageIndex + " of " + numberOfPages + " pages in total");
             System.out.println(
                     "Words "
@@ -89,7 +99,7 @@ public class DictionaryManagement {
                             + "-"
                             + toWordIndex
                             + " of "
-                            + dictionary.getNumWords()
+                            + wordsList.size()
                             + " words in total");
             System.out.print(
                     "==> Enter `l/r/q/<PAGE_NUMBER>` for `page before/page after/quit/jump to"
@@ -207,25 +217,10 @@ public class DictionaryManagement {
             System.out.print("==> Enter the prefix to search: ");
             String target = Helper.readLine();
 
-            ArrayList<String> searchedWords = Trie.search(target);
+            ArrayList<String> searchedWordTargets = Trie.search(target);
+            ArrayList<Word> searchedWords = dictionary.fillDefinition(searchedWordTargets);
             if (!searchedWords.isEmpty()) {
-                StringBuilder result =
-                        new StringBuilder(
-                                "No      | English                                     | Vietnamese");
-                for (int i = 0; i < searchedWords.size(); ++i) {
-                    String first = String.valueOf(i + 1);
-                    first += Helper.createSpacesString(8 - first.length());
-                    String second = " " + searchedWords.get(i);
-                    second += Helper.createSpacesString(55 - second.length());
-                    String third = " " + dictionary.lookUpWord(searchedWords.get(i));
-                    result.append('\n')
-                            .append(first)
-                            .append('|')
-                            .append(second)
-                            .append('|')
-                            .append(third);
-                }
-                System.out.println(result);
+                showWordsPartial(searchedWords);
             } else {
                 System.out.println("No word starts with `" + target + "` found in the dictionary!");
             }
@@ -258,7 +253,7 @@ public class DictionaryManagement {
     public static void dictionaryExportToFile() {
         try {
             FileWriter out = new FileWriter("exportToFile.txt");
-            String export = dictionary.getAllWords();
+            String export = dictionary.displayAllWords();
             // System.out.println(export);
             out.write(export);
             out.close();

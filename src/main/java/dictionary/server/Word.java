@@ -1,7 +1,7 @@
 package dictionary.server;
 
 public class Word {
-    private String wordTarget;
+    private final String wordTarget;
     private String wordExplain;
 
     /**
@@ -22,15 +22,6 @@ public class Word {
      */
     public String getWordTarget() {
         return wordTarget;
-    }
-
-    /**
-     * Set English word.
-     *
-     * @param wordTarget English word
-     */
-    public void setWordTarget(String wordTarget) {
-        this.wordTarget = wordTarget;
     }
 
     /**
