@@ -1,8 +1,8 @@
 package dictionary.server;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
+import java.util.Map;
+import java.util.TreeMap;
 public class Trie {
 
     private static final ArrayList<String> searchedWords = new ArrayList<>();
@@ -14,9 +14,9 @@ public class Trie {
 
     // trie node
     public static class TrieNode {
-        HashMap<Character, TrieNode> children = new HashMap<Character, TrieNode>();
+        Map<Character, TrieNode> children = new TreeMap<Character, TrieNode>();
 
-        public HashMap<Character, TrieNode> getChildren() {
+        public Map<Character, TrieNode> getChildren() {
             return children;
         }
 
@@ -53,15 +53,28 @@ public class Trie {
         // mark last node as leaf
         pCrawl.isEndOfWord = true;
     }
-    /** Delete a node (if this node.children is empty) */
-    public void deleteNode(TrieNode node) {
-        if(node == null){
+    /** Delete a word () */
+    public void deleteNode(String key) {
+        int level;
+        int length = key.length();
+        char index;
+
+        TrieNode pCrawl = root;
+
+        for (level = 0; level < length; level++) {
+            index = key.charAt(level);
+            if (pCrawl.children.get(index) == null){
+                System.out.println("This word has not been inserted");
+                return;
+            }
+            pCrawl = pCrawl.children.get(index);
+        }
+        if(pCrawl.isEndOfWord == false) {
+            System.out.println("This word has not been inserted");
             return;
         }
-
-        if(node.getChildren().isEmpty()) {
-            node = null;
-        }
+        // mark last node as leaf
+        pCrawl.isEndOfWord = false;
     }
 
     private static void dfs(TrieNode pCrawl, String key) {
