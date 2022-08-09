@@ -53,6 +53,19 @@ public class Helper {
     }
 
     /**
+     * Creates a string of `-`` that is 'length' characters long.
+     *
+     * @param length The number of `-` characters to add to the vertical separator line.
+     * @return the string of `length` characters `-`
+     */
+    public static String createLineSeparator(int length) {
+        if (length < 0) {
+            length = 0;
+        }
+        return CharBuffer.allocate(length).toString().replace('\0', '-');
+    }
+
+    /**
      * Convert HTML to plain text keeping line breaks, paragraph...
      *
      * <p>Reference:

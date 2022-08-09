@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class TranslatorApi {
 
@@ -55,7 +56,7 @@ public class TranslatorApi {
         String urlStr =
                 "https://script.google.com/macros/s/AKfycby3AOWmhe32TgV9nW-Q0TyGOEyCHQeFiIn7hRgy5m8jHPaXDl2GdToyW_3Ys5MTbK6wjg/exec"
                         + "?q="
-                        + URLEncoder.encode(text, "UTF-8")
+                        + URLEncoder.encode(text, StandardCharsets.UTF_8)
                         + "&target="
                         + langTo
                         + "&source="
@@ -64,7 +65,9 @@ public class TranslatorApi {
         StringBuilder response = new StringBuilder();
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        BufferedReader in =
+                new BufferedReader(
+                        new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);

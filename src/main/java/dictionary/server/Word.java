@@ -29,7 +29,7 @@ public class Word {
      *
      * @return Vietnamese definition of word
      */
-    public String getWordExplain() {
+    public String getWordDefinition() {
         return wordExplain;
     }
 
