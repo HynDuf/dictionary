@@ -14,6 +14,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import static dictionary.server.History.historySearch;
+
 public class DictionaryManagement {
 
     private static final Dictionary dictionary = new Dictionary();
@@ -34,6 +36,7 @@ public class DictionaryManagement {
         String target = Helper.readLine();
         String definition = dictionary.lookUpWord(target);
         definition = Helper.htmlToText(definition);
+        historySearch.add(target);
         if (definition.equals("404")) {
             System.out.println("The word you looked up isn't in the dictionary!\n");
         } else {
@@ -190,11 +193,13 @@ public class DictionaryManagement {
     public static void insertFromFile() {
 
         /* TODO: pass the path to the file as a parameter */
+        System.out.println("==> Enter the path to insert: ");
+        String importFromFile = Helper.readLine();
         try {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(
-                                    new FileInputStream("importFromFile.txt"),
+                                    new FileInputStream(importFromFile),
                                     StandardCharsets.UTF_8));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
@@ -212,10 +217,10 @@ public class DictionaryManagement {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.out.println("Couldn't find `importFromFile.txt`");
+            System.out.println("Couldn't find " + importFromFile );
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Couldn't read `importFromFile.txt");
+            System.out.println("Couldn't read " + importFromFile );
         }
 
         Helper.pressEnterToContinue();
@@ -226,7 +231,7 @@ public class DictionaryManagement {
         try {
             System.out.print("==> Enter the prefix to search: ");
             String target = Helper.readLine();
-
+            historySearch.add(target);
             ArrayList<String> searchedWordTargets = Trie.search(target);
             ArrayList<Word> searchedWords = dictionary.fillDefinition(searchedWordTargets);
             if (!searchedWords.isEmpty()) {
@@ -261,16 +266,18 @@ public class DictionaryManagement {
 
     /** Option 10. Export to file `exportToFile.txt` */
     public static void dictionaryExportToFile() {
+        System.out.println("==> Enter the path to export: ");
+        String exportToFile = Helper.readLine();
         try {
             Writer out =
                     new BufferedWriter(
                             new OutputStreamWriter(
-                                    new FileOutputStream("exportToFile.txt"),
+                                    new FileOutputStream(exportToFile),
                                     StandardCharsets.UTF_8));
             String export = dictionary.exportAllWords();
             out.write(export);
             out.close();
-            System.out.println("Exported successfully to `exportToFile.txt`");
+            System.out.println("Exported successfully to " + exportToFile);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("An error occurred.`");
