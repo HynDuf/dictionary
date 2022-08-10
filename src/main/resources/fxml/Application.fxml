@@ -1,12 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
-  <TextField fx:id="inputText" layoutX="34.0" layoutY="73.0" onAction="#lookUpWord" onKeyTyped="#searchWord" prefHeight="41.0" prefWidth="242.0" promptText="Tìm kiếm" />
-  <ListView fx:id="searchList" layoutX="33.0" layoutY="120.0" onKeyPressed="#selectWord" prefHeight="485.0" prefWidth="241.0" />
-  <ScrollPane layoutX="286.0" layoutY="72.0" prefHeight="533.0" prefWidth="577.0">
-    <VBox fx:id="definitionBox" layoutX="200.0" layoutY="200.0" prefHeight="538.0" prefWidth="456.0" />
+<AnchorPane prefHeight="602.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
+  <ListView fx:id="searchList" layoutX="32.0" layoutY="97.0" onKeyPressed="#selectWord" prefHeight="456.0" prefWidth="242.0" />
+  <ScrollPane layoutX="286.0" layoutY="96.0" prefHeight="456.0" prefWidth="484.0">
+    <VBox fx:id="definitionBox" layoutX="200.0" layoutY="200.0" prefHeight="518.0" prefWidth="437.0" />
   </ScrollPane>
+   <Button layoutX="286.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="102.0" text="Thêm từ">
+      <font>
+         <Font size="11.0" />
+      </font></Button>
+  <TextField fx:id="inputText" layoutX="33.0" layoutY="29.0" onAction="#lookUpWord" onKeyTyped="#searchWord" prefHeight="51.0" prefWidth="239.0" promptText="Tìm kiếm" />
+   <Button layoutX="406.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="102.0" text="Xóa từ">
+      <font>
+         <Font size="11.0" />
+      </font>
+   </Button>
+   <Button layoutX="524.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="102.0" text="Thông tin">
+      <font>
+         <Font size="11.0" />
+      </font>
+   </Button>
+   <Button layoutX="643.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="102.0" text="Lịch sử">
+      <font>
+         <Font size="11.0" />
+      </font>
+   </Button>
+   <Button layoutX="761.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="102.0" text="Xuất file từ">
+      <font>
+         <Font size="11.0" />
+      </font>
+   </Button>
+   <BorderPane layoutX="770.0" layoutY="96.0" prefHeight="26.0" prefWidth="94.0">
+      <top>
+         <Button mnemonicParsing="false" prefHeight="34.0" prefWidth="122.0" text="Nhấn để phát âm" BorderPane.alignment="CENTER">
+            <font>
+               <Font size="10.0" />
+            </font>
+         </Button>
+      </top>
+   </BorderPane>
+   <Button layoutX="770.0" layoutY="517.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="102.0" text="Dịch câu">
+      <font>
+         <Font size="10.0" />
+      </font>
+   </Button>
 </AnchorPane>
