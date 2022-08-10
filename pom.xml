@@ -9,8 +9,6 @@
 <version>1.0-SNAPSHOT</version>
 
 <name>dictionary</name>
-<!-- FIXME change it to the project's website -->
-<url>http://www.example.com</url>
 
 <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,6 +17,12 @@
 </properties>
 
 <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+    <dependency>
+        <groupId>org.jsoup</groupId>
+        <artifactId>jsoup</artifactId>
+        <version>1.15.2</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
     <dependency>
         <groupId>mysql</groupId>
@@ -41,8 +45,12 @@
         <artifactId>javafx-web</artifactId>
         <version>17-ea+11</version>
     </dependency>
-
-
+    <!-- https://mvnrepository.com/artifact/net.sf.sociaal/freetts -->
+    <dependency>
+        <groupId>net.sf.sociaal</groupId>
+        <artifactId>freetts</artifactId>
+        <version>1.2.2</version>
+    </dependency>
     <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>

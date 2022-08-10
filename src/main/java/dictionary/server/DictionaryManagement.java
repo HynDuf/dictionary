@@ -1,52 +1,148 @@
 package dictionary.server;
 
-import java.io.File;
+import dictionary.server.database.Database;
+import dictionary.server.google_translate_api.TranslatorApi;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class DictionaryManagement {
 
-    public static void initialize() {
-        Dictionary.insertWord("hello", "xin chao");
-        Dictionary.insertWord("head", "cai dau");
-        Dictionary.insertWord("hi", "xin chao ngan hon");
-        Dictionary.insertWord("highlight", "lam noi bat");
-        Dictionary.insertWord("happy", "vui ve");
-        Dictionary.insertWord("happiness", "su vui ve");
-        ArrayList<String> words = Dictionary.exportAllWords();
+    private static final int WORDS_PER_PAGE = 10;
 
-        for (String word : words) {
-            Trie.insert(word);
-        }
-        ArrayList<String> tem = Trie.search("h");
-        System.out.println("Start\n");
-        for (String w : tem) {
-            System.out.println(w);
-        }
-        System.out.println("done\n");
+    public static void initialize() {
+        setUpDatabase();      
     }
 
-    /** Utility class. Stop from create an instance of the class. */
-    private DictionaryManagement() {}
+    /** Set up Database. */
+    public static void setUpDatabase() {
+        Database.connectToDatabase();
+        ArrayList<String> targets = Database.getAllWordsTarget();
+        for (String word : targets) {
+            Trie.insert(word);
+        }
+    }
 
     /** Option 1. Look up a word's definition. */
     public static void lookUpWord() {
         System.out.print("==> Enter the English word to look up: ");
         String target = Helper.readLine();
         String definition = Dictionary.lookUpWord(target);
+        definition = Helper.htmlToText(definition);
         if (definition.equals("404")) {
             System.out.println("The word you looked up isn't in the dictionary!\n");
         } else {
-            System.out.println("Definition of `" + target + "`: " + definition + '\n');
+            System.out.println(
+                    "Definition of `"
+                            + target
+                            + "` (Ensure your terminal can render Vietnamese characters): \n"
+                            + definition
+                            + '\n');
+        }
+        Helper.pressEnterToContinue();
+    }
+
+    /**
+     * Option 2. Show words currently in the dictionary.
+     *
+     * <p>There are 2 types:
+     *
+     * <p>- Show all words.
+     *
+     * <p>- Show 10 words each.
+     */
+    public static void showWords() {
+        while (true) {
+            System.out.println("\nChoose an option to proceed:");
+            System.out.println("1. Show all words");
+            System.out.println(
+                    "2. Show words partially (max of `WORDS_PER_PAGE` (Default: 10) words each)");
+            System.out.print("==> Enter an option (1-2): ");
+            int selection = Helper.readInteger();
+            Helper.readLine();
+            if (selection == 1) {
+                System.out.println(Dictionary.displayAllWords());
+                Helper.pressEnterToContinue();
+                return;
+            } else if (selection == 2) {
+                showAllWordsPartial();
+                return;
+            } else {
+                System.out.println("Invalid option!");
+            }
         }
     }
 
-    /** Option 2. Show all words currently in the dictionary. */
-    public static void showAllWords() {
-        System.out.println(Dictionary.getAllWords());
+    /** Show max of `WORDS_PER_PAGE` each time. Can change the active page interactively. */
+    public static void showAllWordsPartial() {
+        ArrayList<Word> wordsList = Dictionary.getAllWords();
+        showWordsPartial(wordsList);
+    }
+
+    /**
+     * Show all the words in `wordsList` partially (max `WORDS_PER_PAGE` words per page).
+     *
+     * @param wordsList the list of words to show
+     */
+    public static void showWordsPartial(ArrayList<Word> wordsList) {
+        int numberOfPages = (wordsList.size() + WORDS_PER_PAGE - 1) / WORDS_PER_PAGE;
+        int curWordIndex = 1;
+        int curPageIndex = 1;
+        while (true) {
+            int toWordIndex = Math.min(curWordIndex + WORDS_PER_PAGE - 1, wordsList.size());
+            System.out.println(Dictionary.printWordsTable(wordsList, curWordIndex, toWordIndex));
+            System.out.println("Page " + curPageIndex + " of " + numberOfPages + " pages in total");
+            System.out.println(
+                    "Words "
+                            + curWordIndex
+                            + "-"
+                            + toWordIndex
+                            + " of "
+                            + wordsList.size()
+                            + " words in total");
+            System.out.print(
+                    "==> Enter `l/r/q/<PAGE_NUMBER>` for `page before/page after/quit/jump to"
+                            + " <PAGE_NUMBER>`: ");
+            String option = Helper.readLine();
+            switch (option) {
+                case "l":
+                    if (curPageIndex > 1) {
+                        curPageIndex--;
+                        curWordIndex -= WORDS_PER_PAGE;
+                    }
+                    break;
+                case "r":
+                    if (curPageIndex < numberOfPages) {
+                        curPageIndex++;
+                        curWordIndex += WORDS_PER_PAGE;
+                    }
+                    break;
+                case "q":
+                    return;
+                default:
+                    try {
+                        int pageIndex = Integer.parseInt(option);
+                        if (1 <= pageIndex && pageIndex <= numberOfPages) {
+                            curPageIndex = pageIndex;
+                            curWordIndex = (curPageIndex - 1) * WORDS_PER_PAGE + 1;
+                        } else {
+                            System.out.println("Invalid page number!");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid option!");
+                    }
+                    break;
+            }
+        }
     }
 
     /** Option 3. Add new words from the command line. */
@@ -60,9 +156,12 @@ public class DictionaryManagement {
             System.out.print("==> Word definition: ");
             String definition = Helper.readLine();
             if (!Dictionary.insertWord(target, definition)) {
-                System.out.println("`" + target + "` already exists in the dictionary!");
+                System.out.println("`" + target + "` already existed in the dictionary!\n");
+            } else {
+                System.out.println("`" + target + "` added successfully.\n");
             }
         }
+        Helper.pressEnterToContinue();
     }
 
     /** Option 4. Delete a word. */
@@ -74,6 +173,7 @@ public class DictionaryManagement {
         } else {
             System.out.println("The word you delete isn't in the dictionary!\n");
         }
+        Helper.pressEnterToContinue();
     }
 
     /** Option 5. Update a word's definition. */
@@ -87,70 +187,55 @@ public class DictionaryManagement {
         } else {
             System.out.println("The word you update isn't in the dictionary!\n");
         }
+        Helper.pressEnterToContinue();
     }
 
-    /** Option 6. Insert word from file `inputFromFile.txt` */
+    /** Option 6. Insert word from file `importFromFile.txt`. */
     public static void insertFromFile() {
 
-        /* pass the path to the file as a parameter */
-        File file = new File("inputFromFile.txt");
+        /* TODO: pass the path to the file as a parameter */
         try {
-            Scanner scFile = new Scanner(file);
-            while (scFile.hasNextLine()) {
-                String getLine = scFile.nextLine();
-                int pos = getLine.indexOf("\t");
+            BufferedReader in =
+                    new BufferedReader(
+                            new InputStreamReader(
+                                    new FileInputStream("importFromFile.txt"),
+                                    StandardCharsets.UTF_8));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                int pos = inputLine.indexOf("\t");
                 if (pos == -1) {
                     continue;
                 }
-                String target = getLine.substring(0, pos).trim();
-                String definition = getLine.substring(pos + 1).trim();
-                Dictionary.insertWord(target, definition);
-                System.out.println("Inserted `" + target + "' successfully");
+                String target = inputLine.substring(0, pos).trim();
+                String definition = inputLine.substring(pos + 1).trim();
+                if (Dictionary.insertWord(target, definition)) {
+                    System.out.println("Inserted `" + target + "' successfully");
+                } else {
+                    System.out.println("`" + target + "` already existed in the dictionary!");
+                }
             }
-            scFile.close();
+            in.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.out.println("Couldn't find `inputFromFile.txt`");
-        }
-    }
-
-    /** Option 7. Export to file */
-    public static void dictionaryExportToFile() {
-
-        try {
-            FileWriter out = new FileWriter("exportToFile.txt");
-            String export = Dictionary.getAllWords();
-            // System.out.println(export);
-            out.write(export);
-            out.close();
-            System.out.println("Exported successfully");
+            System.out.println("Couldn't find `importFromFile.txt`");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("An error occurred.`");
+            System.out.println("Couldn't read `importFromFile.txt");
         }
+
+        Helper.pressEnterToContinue();
     }
 
-    /** Option 8. Searcher */
-    public static void dictionarySearcher() {
+    /** Option 7. Search and list all the words start with a certain text */
+    public static void searchWords() {
         try {
-            System.out.print("==> Enter the English word to search: ");
+            System.out.print("==> Enter the prefix to search: ");
             String target = Helper.readLine();
 
-            ArrayList<String> searchedWords = Trie.search(target);
+            ArrayList<String> searchedWordTargets = Trie.search(target);
+            ArrayList<Word> searchedWords = Dictionary.fillDefinition(searchedWordTargets);
             if (!searchedWords.isEmpty()) {
-                StringBuilder result =
-                    new StringBuilder(
-                        "No      | English                                     | Vietnamese");
-                for (int i = 0; i < searchedWords.size(); ++i) {
-                    String first = String.valueOf(i + 1);
-                    first += Helper.createSpacesString(8 - first.length());
-                    String second = " " + searchedWords.get(i);
-                    second += Helper.createSpacesString(45 - second.length());
-                    String third = " " + Dictionary.lookUpWord(searchedWords.get(i));
-                    result.append('\n').append(first).append('|').append(second).append('|')
-                        .append(third);
-                }
-                System.out.println(result);
+                showWordsPartial(searchedWords);
             } else {
                 System.out.println("No word starts with `" + target + "` found in the dictionary!");
             }
@@ -160,9 +245,45 @@ public class DictionaryManagement {
         }
     }
 
-    /** Option 9. Exit the application. */
+    /** Option 8. Translate English text to Vietnamese Text with GoogleTranslateAPI. */
+    public static void translateEnToVi() {
+        System.out.print("==> Enter the English text you want to translate: ");
+        String text = Helper.readLine();
+        System.out.println(
+                "The Vietnamese translated text"
+                        + " (Ensure that your terminal can render Vietnamese characters): ");
+        System.out.println(TranslatorApi.translateEnToVi(text) + "\n");
+        Helper.pressEnterToContinue();
+    }
+
+    /** Option 9. Text to Speech, speaking English text in English. */
+    public static void textToSpeech() {
+        System.out.print("==> Enter the English text you want to listen to: ");
+        String text = Helper.readLine();
+        TextToSpeech.playSound(text);
+        Helper.pressEnterToContinue();
+    }
+
+    /** Option 10. Export to file `exportToFile.txt` */
+    public static void dictionaryExportToFile() {
+        try {
+            Writer out =
+                    new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream("exportToFile.txt"),
+                                    StandardCharsets.UTF_8));
+            String export = Dictionary.exportAllWords();
+            out.write(export);
+            out.close();
+            System.out.println("Exported successfully to `exportToFile.txt`");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("An error occurred.`");
+        }
+    }
+
+    /** Option 11. Exit the application. */
     public static void exitApplication() {
         System.out.println("Exiting...");
-        System.exit(0);
     }
 }

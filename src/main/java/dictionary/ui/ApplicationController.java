@@ -5,15 +5,21 @@ import dictionary.server.Trie;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-
-import java.util.ArrayList;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class ApplicationController {
     public ApplicationController() {}
@@ -25,31 +31,25 @@ public class ApplicationController {
     public void searchWord() {
         searchList.getItems().clear();
         String target = inputText.getText();
-        System.out.println("target: " + target);
         ArrayList<String> searchedWords = Trie.search(target);
         for (String w : searchedWords) {
-            System.out.println(w);
             searchList.getItems().add(w);
         }
     }
 
-    @FXML
-    private VBox definitionBox;
+    @FXML private WebView webView;
+
     @FXML
     public void lookUpWord() {
-        System.out.println("Enter!!!");
         String target = inputText.getText();
         String definition = Dictionary.lookUpWord(target);
-        definitionBox.getChildren().clear();
         if (definition.equals("404")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Thông báo");
             alert.setContentText("Từ này không tồn tại!");
             alert.show();
         } else {
-            Label label = new Label();
-            label.setText(target + "\n\n" + definition);
-            definitionBox.getChildren().add(label);
+            webView.getEngine().loadContent(definition, "text/html");
         }
     }
 
@@ -59,6 +59,27 @@ public class ApplicationController {
             String target = searchList.getSelectionModel().getSelectedItem();
             inputText.setText(target);
             lookUpWord();
+        }
+    }
+
+    @FXML
+    public void changeToSentencesTranslatingApplication(ActionEvent event) {
+        try {
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource(
+                                                    "fxml/SentencesTranslatingApplication.fxml")));
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            appStage.setTitle("Sentences Translator");
+            appStage.setResizable(false);
+            appStage.setScene(scene);
+            appStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

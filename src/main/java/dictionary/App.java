@@ -1,6 +1,7 @@
 package dictionary;
 
 import dictionary.server.DictionaryManagement;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -19,15 +20,17 @@ public class App extends Application {
     }
 
     /** Start Application. */
-        @Override
+    @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Dictionary");
         primaryStage.setResizable(false);
         try {
             Parent root =
                     FXMLLoader.load(
-                        Objects.requireNonNull(
-                            getClass().getClassLoader().getResource("fxml/Application.fxml")));
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource("fxml/Application.fxml")));
             Scene scene = new Scene(root, 900, 650);
             primaryStage.setScene(scene);
             primaryStage.show();

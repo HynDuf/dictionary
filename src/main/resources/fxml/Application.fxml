@@ -8,12 +8,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
 <AnchorPane prefHeight="602.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
   <ListView fx:id="searchList" layoutX="32.0" layoutY="97.0" onKeyPressed="#selectWord" prefHeight="456.0" prefWidth="242.0" />
-  <ScrollPane layoutX="286.0" layoutY="96.0" prefHeight="456.0" prefWidth="484.0">
-    <VBox fx:id="definitionBox" layoutX="200.0" layoutY="200.0" prefHeight="518.0" prefWidth="437.0" />
-  </ScrollPane>
+  <WebView fx:id="webView" layoutX="286.0" layoutY="96.0" prefHeight="456.0" prefWidth="484.0" />
    <Button layoutX="286.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="102.0" text="Thêm từ">
       <font>
          <Font size="11.0" />
@@ -48,7 +47,7 @@
          </Button>
       </top>
    </BorderPane>
-   <Button layoutX="770.0" layoutY="517.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="102.0" text="Dịch câu">
+   <Button layoutX="770.0" layoutY="517.0" onAction="#changeToSentencesTranslatingApplication" mnemonicParsing="false" prefHeight="34.0" prefWidth="102.0" text="Dịch câu">
       <font>
          <Font size="10.0" />
       </font>
