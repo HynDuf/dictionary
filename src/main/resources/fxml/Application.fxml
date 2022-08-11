@@ -40,7 +40,7 @@
    </Button>
    <BorderPane layoutX="770.0" layoutY="96.0" prefHeight="26.0" prefWidth="94.0">
       <top>
-         <Button mnemonicParsing="false" prefHeight="34.0" prefWidth="122.0" text="Nhấn để phát âm" BorderPane.alignment="CENTER">
+         <Button onAction="#playSound" mnemonicParsing="false" prefHeight="34.0" prefWidth="122.0" text="Nhấn để phát âm" BorderPane.alignment="CENTER">
             <font>
                <Font size="10.0" />
             </font>

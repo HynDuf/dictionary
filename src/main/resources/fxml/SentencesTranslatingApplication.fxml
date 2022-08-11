@@ -24,9 +24,9 @@
             <Text layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tiếng Việt" wrappingWidth="115.19999999999993" />
          </children>
       </Pane>
-      <TextField alignment="TOP_LEFT" layoutX="99.0" layoutY="364.0" prefHeight="186.0" prefWidth="671.0" promptText="Dịch" />
-      <TextField alignment="TOP_LEFT" layoutX="99.0" layoutY="66.0" prefHeight="186.0" prefWidth="671.0" promptText="Nhập vào đây" />
-      <Button layoutX="99.0" layoutY="252.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="102.0" text="Nhấn để dịch">
+      <TextField fx:id="sinkText" alignment="TOP_LEFT" layoutX="99.0" layoutY="364.0" prefHeight="186.0" prefWidth="671.0" promptText="Dịch" />
+      <TextField fx:id="sourceText" alignment="TOP_LEFT" layoutX="99.0" layoutY="66.0" prefHeight="186.0" prefWidth="671.0" promptText="Nhập vào đây" />
+      <Button onAction="#translateEnToVi" layoutX="99.0" layoutY="252.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="102.0" text="Nhấn để dịch">
          <font>
             <Font size="10.0" />
          </font>

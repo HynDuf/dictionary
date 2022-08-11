@@ -1,8 +1,11 @@
 package dictionary.ui;
 
 import dictionary.server.Dictionary;
+import dictionary.server.TextToSpeech;
 import dictionary.server.Trie;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,15 +20,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
-
 public class ApplicationController {
-    public ApplicationController() {}
-
+    private String lastLookUpWord = "";
     @FXML private TextField inputText;
     @FXML private ListView<String> searchList;
+    @FXML private WebView webView;
+
+    public ApplicationController() {}
 
     @FXML
     public void searchWord() {
@@ -37,11 +38,10 @@ public class ApplicationController {
         }
     }
 
-    @FXML private WebView webView;
-
     @FXML
     public void lookUpWord() {
         String target = inputText.getText();
+        lastLookUpWord = target;
         String definition = Dictionary.lookUpWord(target);
         if (definition.equals("404")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -80,6 +80,13 @@ public class ApplicationController {
             appStage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void playSound() {
+        if (!lastLookUpWord.isEmpty()) {
+            TextToSpeech.playSound(lastLookUpWord);
         }
     }
 }
