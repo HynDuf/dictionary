@@ -15,6 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -82,4 +84,54 @@ public class ApplicationController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void showInformation(ActionEvent event){
+        try {
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource(
+                                                    "fxml/InformationPopup.fxml")));
+            Stage infStage = new Stage();
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            infStage.initOwner(appStage);
+            Scene scene = new Scene(root);
+            infStage.setTitle("Về ứng dụng");
+            infStage.setResizable(false);
+            infStage.setScene(scene);
+            infStage.initModality(Modality.APPLICATION_MODAL);
+            infStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void showInstruction(ActionEvent event){
+        try {
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource(
+                                                    "fxml/InstructionPopup.fxml")));
+            Stage insStage = new Stage();
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            insStage.initOwner(appStage);
+            Scene scene = new Scene(root);
+            insStage.setTitle("Hướng dẫn sử dụng");
+            insStage.setResizable(false);
+            insStage.setScene(scene);
+            insStage.initModality(Modality.APPLICATION_MODAL);
+            insStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
+
