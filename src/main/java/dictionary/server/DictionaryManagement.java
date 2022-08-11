@@ -1,5 +1,7 @@
 package dictionary.server;
 
+import static dictionary.server.History.historySearch;
+
 import dictionary.server.database.Database;
 import dictionary.server.google_translate_api.TranslatorApi;
 import java.io.BufferedReader;
@@ -13,8 +15,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
-import static dictionary.server.History.historySearch;
 
 public class DictionaryManagement {
 
@@ -199,8 +199,7 @@ public class DictionaryManagement {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(
-                                    new FileInputStream(importFromFile),
-                                    StandardCharsets.UTF_8));
+                                    new FileInputStream(importFromFile), StandardCharsets.UTF_8));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 int pos = inputLine.indexOf("\t");
@@ -217,10 +216,10 @@ public class DictionaryManagement {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.out.println("Couldn't find " + importFromFile );
+            System.out.println("Couldn't find " + importFromFile);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Couldn't read " + importFromFile );
+            System.out.println("Couldn't read " + importFromFile);
         }
 
         Helper.pressEnterToContinue();
@@ -258,9 +257,29 @@ public class DictionaryManagement {
 
     /** Option 9. Text to Speech, speaking English text in English. */
     public static void textToSpeech() {
+        int option;
+        while (true) {
+            System.out.println("\nWho do you want to listen to?");
+            System.out.println("1. Kevin16");
+            System.out.println("2. Google Translate");
+            System.out.print("==> Enter an option (1-2): ");
+            option = Helper.readInteger();
+            Helper.readLine();
+            if (option == 1 || option == 2) {
+                break;
+            } else {
+                System.out.println("Invalid option!");
+            }
+        }
         System.out.print("==> Enter the English text you want to listen to: ");
         String text = Helper.readLine();
-        TextToSpeech.playSound(text);
+        System.out.println("Speaking...");
+        if (option == 1) {
+            TextToSpeech.playSoundKevin16(text);
+        } else {
+            TextToSpeech.playSoundGoogleTranslate(text);
+        }
+        System.out.println("Done...");
         Helper.pressEnterToContinue();
     }
 
@@ -272,8 +291,7 @@ public class DictionaryManagement {
             Writer out =
                     new BufferedWriter(
                             new OutputStreamWriter(
-                                    new FileOutputStream(exportToFile),
-                                    StandardCharsets.UTF_8));
+                                    new FileOutputStream(exportToFile), StandardCharsets.UTF_8));
             String export = dictionary.exportAllWords();
             out.write(export);
             out.close();
