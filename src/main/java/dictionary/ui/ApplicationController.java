@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ApplicationController {
@@ -65,14 +66,11 @@ public class ApplicationController {
     @FXML
     public void changeToSentencesTranslatingApplication(ActionEvent event) {
         try {
-            Parent root =
-                    FXMLLoader.load(
-                            Objects.requireNonNull(
-                                    getClass()
-                                            .getClassLoader()
-                                            .getResource(
-                                                    "fxml/SentencesTranslatingApplication.fxml")));
-            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(
+                Objects.requireNonNull(getClass().getClassLoader().getResource(
+                    "fxml/SentencesTranslatingApplication.fxml")));
+            Stage appStage =
+                (Stage)((Node)event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             appStage.setTitle("Sentences Translator");
             appStage.setResizable(false);
@@ -87,6 +85,29 @@ public class ApplicationController {
     public void playSound() {
         if (!lastLookUpWord.isEmpty()) {
             TextToSpeech.playSound(lastLookUpWord);
+        }
+    }
+
+    @FXML
+    public void exportToFile(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(
+                Objects.requireNonNull(getClass().getClassLoader().getResource(
+                    "fxml/ExportToFile.fxml")));
+            System.out.println("Some thingggggggggggg");
+            Stage appStage =
+                (Stage)((Node)event.getSource()).getScene().getWindow();
+            Stage newStage = new Stage();
+            Scene scene = new Scene(root);
+            newStage.setScene(scene);
+            newStage.initOwner(appStage);
+            newStage.setTitle("Export to file");
+            newStage.setResizable(false);
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

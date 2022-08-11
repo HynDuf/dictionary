@@ -33,7 +33,7 @@
          <Font size="11.0" />
       </font>
    </Button>
-   <Button layoutX="761.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="102.0" text="Xuất file từ">
+   <Button layoutX="761.0" layoutY="29.0" mnemonicParsing="false" onAction="#exportToFile" prefHeight="51.0" prefWidth="102.0" text="Xuất file từ">
       <font>
          <Font size="11.0" />
       </font>
