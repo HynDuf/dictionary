@@ -29,6 +29,7 @@ public class ExportToFileController {
     @FXML
     public void submitExport() {
         String file = fileName.getText();
+        System.out.println(file);
         String dirPath = dirLabel.getText();
         if (!dirPath.isEmpty() && !file.isEmpty()) {
             // Dictionary.exportAllWords(dirPath)

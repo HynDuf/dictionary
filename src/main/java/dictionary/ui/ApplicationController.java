@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -66,14 +67,16 @@ public class ApplicationController {
     @FXML
     public void changeToSentencesTranslatingApplication(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
-                Objects.requireNonNull(getClass().getClassLoader().getResource(
-                    "fxml/SentencesTranslatingApplication.fxml")));
-            Stage appStage =
-                (Stage)((Node)event.getSource()).getScene().getWindow();
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource(
+                                                    "fxml/SentencesTranslatingApplication.fxml")));
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             appStage.setTitle("Sentences Translator");
-            appStage.setResizable(false);
             appStage.setScene(scene);
             appStage.show();
         } catch (IOException e) {
@@ -91,18 +94,92 @@ public class ApplicationController {
     @FXML
     public void exportToFile(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
-                Objects.requireNonNull(getClass().getClassLoader().getResource(
-                    "fxml/ExportToFile.fxml")));
-            System.out.println("Some thingggggggggggg");
-            Stage appStage =
-                (Stage)((Node)event.getSource()).getScene().getWindow();
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource("fxml/ExportToFile.fxml")));
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Stage newStage = new Stage();
             Scene scene = new Scene(root);
             newStage.setScene(scene);
             newStage.initOwner(appStage);
-            newStage.setTitle("Export to file");
-            newStage.setResizable(false);
+            newStage.setTitle("Xuất dữ liệu từ điển");
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showInformation(ActionEvent event) {
+        try {
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource("fxml/InformationPopup.fxml")));
+            Stage infStage = new Stage();
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            infStage.initOwner(appStage);
+            Scene scene = new Scene(root);
+            infStage.setTitle("Về ứng dụng");
+            infStage.setScene(scene);
+            infStage.initModality(Modality.APPLICATION_MODAL);
+            infStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void showInstruction(ActionEvent event) {
+        try {
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource("fxml/InstructionPopup.fxml")));
+            Stage insStage = new Stage();
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            insStage.initOwner(appStage);
+            Scene scene = new Scene(root);
+            insStage.setTitle("Hướng dẫn sử dụng");
+            insStage.setScene(scene);
+            insStage.initModality(Modality.APPLICATION_MODAL);
+            insStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void editWordDefinition(ActionEvent event) {
+        if (lastLookUpWord.isEmpty()) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Thông báo");
+            alert.setContentText("Chưa chọn từ để chỉnh sửa!");
+            alert.show();
+            return;
+        }
+        EditDefinitionController.setEditingWord(lastLookUpWord);
+        try {
+            Parent root =
+                FXMLLoader.load(
+                    Objects.requireNonNull(
+                        getClass()
+                            .getClassLoader()
+                            .getResource("fxml/EditDefinition.fxml")));
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage newStage = new Stage();
+            Scene scene = new Scene(root);
+            newStage.setScene(scene);
+            newStage.initOwner(appStage);
+            newStage.setTitle("Chỉnh sửa giải nghĩa của từ");
             newStage.initModality(Modality.APPLICATION_MODAL);
             newStage.show();
 

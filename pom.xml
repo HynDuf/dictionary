@@ -33,17 +33,17 @@
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
-        <version>17-ea+11</version>
+        <version>20-ea+1</version>
     </dependency>
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-fxml</artifactId>
-        <version>17-ea+11</version>
+        <version>20-ea+1</version>
     </dependency>
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-web</artifactId>
-        <version>17-ea+11</version>
+        <version>20-ea+1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/net.sf.sociaal/freetts -->
     <dependency>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+
+
+<AnchorPane prefHeight="605.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.EditDefinitionController">
+   <children>
+      <Label fx:id="editLabel" alignment="CENTER" layoutX="156.0" layoutY="23.0" prefHeight="42.0" prefWidth="312.0" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <HTMLEditor fx:id="htmlEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" layoutX="37.0" layoutY="81.0" prefHeight="462.0" prefWidth="552.0" />
+      <Button layoutX="524.0" layoutY="557.0" mnemonicParsing="false" onAction="#saveDefinition" prefHeight="36.0" prefWidth="64.0" text="Lưu" />
+   </children>
+</AnchorPane>

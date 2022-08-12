@@ -31,7 +31,7 @@ public class App extends Application {
                                     getClass()
                                             .getClassLoader()
                                             .getResource("fxml/Application.fxml")));
-            Scene scene = new Scene(root, 900, 650);
+            Scene scene = new Scene(root, 900, 580);
             primaryStage.setScene(scene);
             primaryStage.show();
             primaryStage.setOnCloseRequest(

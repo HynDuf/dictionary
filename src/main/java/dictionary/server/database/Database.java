@@ -196,8 +196,8 @@ public class Database {
         final String SQL_QUERY = "UPDATE dictionary SET definition = ? WHERE target = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
-            ps.setString(1, target);
-            ps.setString(2, definition);
+            ps.setString(1, definition);
+            ps.setString(2, target);
             try {
                 int updatedRows = ps.executeUpdate();
                 if (updatedRows == 0) {
