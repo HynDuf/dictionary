@@ -1,5 +1,6 @@
 package dictionary.server;
 
+import static dictionary.server.History.exportHistory;
 import static dictionary.server.History.historySearch;
 
 import dictionary.server.database.Database;
@@ -36,7 +37,7 @@ public class DictionaryManagement {
         String target = Helper.readLine();
         String definition = dictionary.lookUpWord(target);
         definition = Helper.htmlToText(definition);
-        historySearch.add(target);
+        exportHistory(target);
         if (definition.equals("404")) {
             System.out.println("The word you looked up isn't in the dictionary!\n");
         } else {
@@ -230,7 +231,7 @@ public class DictionaryManagement {
         try {
             System.out.print("==> Enter the prefix to search: ");
             String target = Helper.readLine();
-            historySearch.add(target);
+            exportHistory(target);
             ArrayList<String> searchedWordTargets = Trie.search(target);
             ArrayList<Word> searchedWords = dictionary.fillDefinition(searchedWordTargets);
             if (!searchedWords.isEmpty()) {

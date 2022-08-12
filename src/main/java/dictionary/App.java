@@ -4,6 +4,8 @@ import dictionary.server.DictionaryManagement;
 import dictionary.server.Helper;
 import dictionary.server.database.Database;
 
+import static dictionary.server.History.insertHistory;
+
 public class App {
 
     private static final int LOOK_UP = 1;
@@ -117,6 +119,7 @@ public class App {
      * @param args cmd arguments
      */
     public static void main(String[] args) {
+        insertHistory();
         databaseOption();
         int option;
         do {
