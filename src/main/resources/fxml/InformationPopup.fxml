@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-    prefHeight="159.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/18"
+    prefHeight="159.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1">
     <Text layoutX="24.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0"
         text="Về ứng dụng" wrappingWidth="474.13670349121094"/>

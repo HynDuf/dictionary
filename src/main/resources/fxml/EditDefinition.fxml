@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.HTMLEditor?>
-<AnchorPane prefHeight="641.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/18"
+<AnchorPane prefHeight="641.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.EditDefinitionController">
     <Label fx:id="editLabel" alignment="CENTER" layoutX="34.0" layoutY="23.0" prefHeight="43.0"
         prefWidth="552.0" textAlignment="CENTER">

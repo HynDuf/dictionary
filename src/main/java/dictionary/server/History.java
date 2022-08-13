@@ -78,6 +78,7 @@ public class History {
      * @param target the word to add
      */
     public static void addWordToHistory(String target) {
+        historySearch.removeIf(e -> e.equals(target));
         historySearch.add(target);
         refactorHistory();
     }

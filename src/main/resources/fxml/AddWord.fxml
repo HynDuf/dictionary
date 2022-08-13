@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.HTMLEditor?>
-<AnchorPane prefHeight="718.0" prefWidth="657.0" xmlns="http://javafx.com/javafx/18"
+<AnchorPane prefHeight="718.0" prefWidth="657.0" xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.AddWordController">
     <TextField fx:id="inputText" layoutX="38.0" layoutY="160.0" prefHeight="44.0" prefWidth="581.0"
         promptText="Nhập từ cần thêm vào đây">
