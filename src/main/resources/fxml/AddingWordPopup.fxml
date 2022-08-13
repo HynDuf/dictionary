@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button layoutX="582.0" layoutY="298.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="108.0" text="Thêm từ" />
+      <TextField layoutX="60.0" layoutY="31.0" prefHeight="44.0" prefWidth="630.0" promptText="Nhập từ cần thêm vào đây" />
+      <Text layoutX="60.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Từ cần thêm" />
+      <TextField layoutX="60.0" layoutY="109.0" prefHeight="44.0" prefWidth="630.0" promptText="Nhập phát âm vào đây" />
+      <Text layoutX="60.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phát âm" />
+      <TextField layoutX="60.0" layoutY="200.0" prefHeight="97.0" prefWidth="630.0" promptText="Nhập nghĩa của từ vào đây" />
+      <Text layoutX="60.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nghĩa của từ" />
+      <Button layoutX="60.0" layoutY="298.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="108.0" text="Quay lại" />
+   </children>
+</AnchorPane>

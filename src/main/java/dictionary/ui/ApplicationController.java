@@ -132,6 +132,29 @@ public class ApplicationController {
             e.printStackTrace();
         }
     }
+
+    public void addingWord(ActionEvent event){
+        try {
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource(
+                                                    "fxml/AddingWordPopup.fxml")));
+            Stage addStage = new Stage();
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            addStage.initOwner(appStage);
+            Scene scene = new Scene(root);
+            addStage.setTitle("Thêm từ");
+            addStage.setResizable(false);
+            addStage.setScene(scene);
+            addStage.initModality(Modality.APPLICATION_MODAL);
+            addStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

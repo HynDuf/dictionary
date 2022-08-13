@@ -11,7 +11,7 @@
 <AnchorPane prefHeight="602.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
   <ListView fx:id="searchList" layoutX="32.0" layoutY="97.0" onKeyPressed="#selectWord" prefHeight="456.0" prefWidth="242.0" />
   <WebView fx:id="webView" layoutX="286.0" layoutY="96.0" prefHeight="456.0" prefWidth="484.0" />
-   <Button layoutX="286.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="102.0" text="Thêm từ">
+   <Button layoutX="286.0" layoutY="29.0" mnemonicParsing="false" onAction="#addingWord" prefHeight="51.0" prefWidth="102.0" text="Thêm từ">
       <font>
          <Font size="11.0" />
       </font></Button>
