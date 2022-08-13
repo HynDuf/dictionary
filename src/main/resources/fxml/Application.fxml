@@ -8,6 +8,13 @@
 <?import javafx.scene.web.WebView?>
 <AnchorPane prefHeight="580.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16"
     xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
+    <TextField fx:id="inputText" layoutX="33.0" layoutY="29.0" onAction="#lookUpWord"
+        onKeyTyped="#prepareSearchList" onKeyPressed="#changeFocusDown" prefHeight="51.0"
+        prefWidth="239.0" promptText="Tìm kiếm">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </TextField>
     <ListView fx:id="searchList" layoutX="32.0" layoutY="97.0" onKeyPressed="#selectWord"
         prefHeight="456.0" prefWidth="242.0"/>
     <WebView fx:id="webView" layoutX="300.0" layoutY="97.0" prefHeight="456.0" prefWidth="490.0"/>
@@ -17,12 +24,6 @@
             <Font size="14.0"/>
         </font>
     </Button>
-    <TextField fx:id="inputText" layoutX="33.0" layoutY="29.0" onAction="#lookUpWord"
-        onKeyTyped="#searchWord" prefHeight="51.0" prefWidth="239.0" promptText="Tìm kiếm">
-        <font>
-            <Font size="14.0"/>
-        </font>
-    </TextField>
     <Button layoutX="429.3333" layoutY="29.0" mnemonicParsing="false" onAction="#showInformation"
         prefHeight="51.0" prefWidth="102.0" text="Thông tin">
         <font>
@@ -37,13 +38,6 @@
     </Button>
     <Button layoutX="688.0" layoutY="29.0" mnemonicParsing="false" onAction="#exportToFile"
         prefHeight="51.0" prefWidth="102.0" text="Xuất dữ liệu">
-        <font>
-            <Font size="14.0"/>
-        </font>
-    </Button>
-    <Button layoutX="802.0" layoutY="518.0" mnemonicParsing="false"
-        onAction="#changeToSentencesTranslatingApplication" prefHeight="34.0" prefWidth="83.0"
-        text="Dịch câu">
         <font>
             <Font size="14.0"/>
         </font>
@@ -64,6 +58,13 @@
     <Button onAction="#deleteWord" layoutX="802.0" layoutY="193.0" mnemonicParsing="false"
         prefHeight="34.0"
         prefWidth="83.0" text="Xóa từ">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+    <Button layoutX="802.0" layoutY="518.0" mnemonicParsing="false"
+        onAction="#changeToSentencesTranslatingApplication" prefHeight="34.0" prefWidth="83.0"
+        text="Dịch câu">
         <font>
             <Font size="14.0"/>
         </font>

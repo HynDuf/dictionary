@@ -62,6 +62,9 @@ public class Trie {
      */
     public static ArrayList<String> search(String prefix) {
         searchedWords.clear();
+        if (prefix.isEmpty()) {
+            return searchedWords;
+        }
         int length = prefix.length();
         TrieNode pCrawl = root;
 

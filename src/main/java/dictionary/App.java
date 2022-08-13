@@ -2,6 +2,7 @@ package dictionary;
 
 import dictionary.server.DictionaryManagement;
 
+import dictionary.server.History;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +16,8 @@ public class App extends Application {
 
     /** Click Run to run the application. */
     public static void main(String[] args) {
-        DictionaryManagement.initialize();
+        DictionaryManagement.setUpDatabase();
+        History.loadHistory();
         launch();
     }
 
@@ -26,19 +28,20 @@ public class App extends Application {
         primaryStage.setResizable(false);
         try {
             Parent root =
-                    FXMLLoader.load(
-                            Objects.requireNonNull(
-                                    getClass()
-                                            .getClassLoader()
-                                            .getResource("fxml/Application.fxml")));
+                FXMLLoader.load(
+                    Objects.requireNonNull(
+                        getClass()
+                            .getClassLoader()
+                            .getResource("fxml/Application.fxml")));
             Scene scene = new Scene(root, 900, 580);
             primaryStage.setScene(scene);
             primaryStage.show();
             primaryStage.setOnCloseRequest(
-                    arg0 -> {
-                        Platform.exit();
-                        System.exit(0);
-                    });
+                arg0 -> {
+                    History.exportHistory();
+                    Platform.exit();
+                    System.exit(0);
+                });
         } catch (Exception e) {
             e.printStackTrace();
         }

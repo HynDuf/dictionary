@@ -1,29 +1,18 @@
 package dictionary.server;
 
-import static dictionary.server.History.historySearch;
-
 import dictionary.server.database.Database;
 import dictionary.server.google_translate_api.TranslatorApi;
-
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class DictionaryManagement {
 
     private static final int WORDS_PER_PAGE = 10;
-
-    public static void initialize() {
-        setUpDatabase();      
-    }
 
     /** Set up Database. */
     public static void setUpDatabase() {
@@ -40,7 +29,6 @@ public class DictionaryManagement {
         String target = Helper.readLine();
         String definition = Dictionary.lookUpWord(target);
         definition = Helper.htmlToText(definition);
-        historySearch.add(target);
         if (definition.equals("404")) {
             System.out.println("The word you looked up isn't in the dictionary!\n");
         } else {
@@ -235,7 +223,6 @@ public class DictionaryManagement {
         try {
             System.out.print("==> Enter the prefix to search: ");
             String target = Helper.readLine();
-            historySearch.add(target);
             ArrayList<String> searchedWordTargets = Trie.search(target);
             ArrayList<Word> searchedWords = Dictionary.fillDefinition(searchedWordTargets);
             if (!searchedWords.isEmpty()) {
