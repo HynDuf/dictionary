@@ -28,7 +28,7 @@ public class EditDefinitionController {
     }
 
     @FXML
-    public void saveDefinition() {
+    public void saveDefinition(ActionEvent event) {
         byte[] ptext = htmlEditor.getHtmlText().getBytes(StandardCharsets.ISO_8859_1);
         String definition = new String(ptext, StandardCharsets.UTF_8);
         definition = definition.replace("<html dir=\"ltr\"><head></head><body contenteditable=\"true\">", "");
@@ -46,6 +46,8 @@ public class EditDefinitionController {
                     "Cập nhật giải nghĩa của từ `" + editingWord + "` không thành công!");
             alert.show();
         }
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     @FXML

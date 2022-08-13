@@ -1,9 +1,12 @@
 package dictionary.server;
 
 import dictionary.server.database.Database;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -224,5 +227,31 @@ public class Dictionary {
         String export = Dictionary.exportAllWords();
         out.write(export);
         out.close();
+    }
+
+    public static String importFromFile(String file) throws IOException {
+        BufferedReader in =
+                new BufferedReader(
+                        new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+        String inputLine;
+        StringBuilder result = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+            int pos = inputLine.indexOf("\t");
+            if (pos == -1) {
+                continue;
+            }
+            String target = inputLine.substring(0, pos).trim();
+            String definition = inputLine.substring(pos + 1).trim();
+            if (Dictionary.insertWord(target, definition)) {
+                result.append("Inserted `").append(target).append("' successfully\n");
+            } else {
+                result.append("`").append(target).append("` already existed in the dictionary!\n");
+            }
+        }
+        in.close();
+        if (result.isEmpty()) {
+            result.append("No words were inserted into the dictionary!");
+        }
+        return result.toString();
     }
 }

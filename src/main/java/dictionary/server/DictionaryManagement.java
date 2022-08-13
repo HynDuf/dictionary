@@ -186,33 +186,15 @@ public class DictionaryManagement {
 
         /* TODO: pass the path to the file as a parameter */
         System.out.println("==> Enter the path to insert: ");
-        String importFromFile = Helper.readLine();
+        String file = Helper.readLine();
         try {
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(
-                                    new FileInputStream(importFromFile), StandardCharsets.UTF_8));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                int pos = inputLine.indexOf("\t");
-                if (pos == -1) {
-                    continue;
-                }
-                String target = inputLine.substring(0, pos).trim();
-                String definition = inputLine.substring(pos + 1).trim();
-                if (Dictionary.insertWord(target, definition)) {
-                    System.out.println("Inserted `" + target + "' successfully");
-                } else {
-                    System.out.println("`" + target + "` already existed in the dictionary!");
-                }
-            }
-            in.close();
+            System.out.println(Dictionary.importFromFile(file));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.out.println("Couldn't find " + importFromFile);
+            System.out.println("Couldn't find " + file);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Couldn't read " + importFromFile);
+            System.out.println("Couldn't read " + file);
         }
 
         Helper.pressEnterToContinue();

@@ -71,40 +71,40 @@ public class ApplicationController {
             searchList.getItems().add(w);
         }
         searchList.setCellFactory(
-            new Callback<>() {
+                new Callback<>() {
 
-                @Override
-                public ListCell<String> call(ListView<String> list) {
-                    return new ListCell<>() {
-                        @Override
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty) {
-                                setGraphic(null);
-                                setText(null);
-                            } else if (item != null && !item.startsWith("#")) {
-                                setText(item);
-                                setFont(Font.font(14));
-                            } else if (item != null) {
-                                try {
-                                    Image fxImage =
-                                        new Image(
-                                            new FileInputStream(
-                                                "src/main/resources/icon/history-icon.png"));
-                                    ImageView imageView = new ImageView(fxImage);
-                                    imageView.setFitHeight(14);
-                                    imageView.setFitWidth(14);
-                                    setGraphic(imageView);
-                                    setText("  " + item.substring(1));
+                    @Override
+                    public ListCell<String> call(ListView<String> list) {
+                        return new ListCell<>() {
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else if (item != null && !item.startsWith("#")) {
+                                    setText(item);
                                     setFont(Font.font(14));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                } else if (item != null) {
+                                    try {
+                                        Image fxImage =
+                                                new Image(
+                                                        new FileInputStream(
+                                                                "src/main/resources/icon/history-icon.png"));
+                                        ImageView imageView = new ImageView(fxImage);
+                                        imageView.setFitHeight(14);
+                                        imageView.setFitWidth(14);
+                                        setGraphic(imageView);
+                                        setText("  " + item.substring(1));
+                                        setFont(Font.font(14));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
-                        }
-                    };
-                }
-            });
+                        };
+                    }
+                });
     }
 
     @FXML
@@ -252,6 +252,13 @@ public class ApplicationController {
             alert.show();
             return;
         }
+        if (Dictionary.lookUpWord(lastLookUpWord).equals("404")) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setContentText("Không tồn tại từ `" + lastLookUpWord + "` trong từ điển để chỉnh sửa!");
+            alert.show();
+            return;
+        }
         EditDefinitionController.setEditingWord(lastLookUpWord);
         try {
             Parent root =
@@ -279,7 +286,7 @@ public class ApplicationController {
         if (lastLookUpWord.isEmpty()) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Thông báo");
-            alert.setContentText("Chưa chọn từ để chỉnh sửa!");
+            alert.setContentText("Chưa chọn từ để xóa!");
             alert.show();
         } else {
 
@@ -300,11 +307,34 @@ public class ApplicationController {
                     } else {
                         Alert alert1 = new Alert(AlertType.ERROR);
                         alert1.setTitle("Lỗi");
-                        alert1.setContentText("Xóa từ `" + lastLookUpWord + "` không thành công!");
+                        alert1.setContentText("Không tồn tại từ `" + lastLookUpWord + "` trong từ điển để xóa!");
                         alert1.show();
                     }
                 }
             }
+        }
+    }
+
+    @FXML
+    public void addingWord(ActionEvent event) {
+        try {
+            Parent root =
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource("fxml/AddWord.fxml")));
+            Stage addStage = new Stage();
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            addStage.initOwner(appStage);
+            Scene scene = new Scene(root);
+            addStage.setTitle("Thêm từ");
+            addStage.setResizable(false);
+            addStage.setScene(scene);
+            addStage.initModality(Modality.APPLICATION_MODAL);
+            addStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

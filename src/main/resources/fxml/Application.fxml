@@ -18,7 +18,7 @@
     <ListView fx:id="searchList" layoutX="32.0" layoutY="97.0" onKeyPressed="#selectWord"
         prefHeight="456.0" prefWidth="242.0"/>
     <WebView fx:id="webView" layoutX="300.0" layoutY="97.0" prefHeight="456.0" prefWidth="490.0"/>
-    <Button layoutX="300.0" layoutY="29.0" mnemonicParsing="false" prefHeight="51.0"
+    <Button layoutX="300.0" layoutY="29.0" mnemonicParsing="false" onAction="#addingWord" prefHeight="51.0"
         prefWidth="102.0" text="Thêm từ">
         <font>
             <Font size="14.0"/>
