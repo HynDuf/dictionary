@@ -41,12 +41,18 @@ public class ApplicationController {
 
     public ApplicationController() {}
 
+    /** Focus on the inputText TextField when first open. Prepare the search list after that. */
     @FXML
     private void initialize() {
         Platform.runLater(() -> inputText.requestFocus());
         prepareSearchList();
     }
 
+    /**
+     * Move to the search list by pressing DOWN arrow key when at the `inputText` TextField.
+     *
+     * @param event action event
+     */
     @FXML
     public void changeFocusDown(KeyEvent event) {
         if (event.getCode() == KeyCode.DOWN) {
@@ -57,6 +63,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Prepare the search lists having the text in `inputText` as prefix. Words in the history base
+     * appears first in the list, and they begin with a "history" icon.
+     */
     public void prepareSearchList() {
         searchList.getItems().clear();
         String target = inputText.getText();
@@ -107,6 +117,7 @@ public class ApplicationController {
                 });
     }
 
+    /** Look up the word in the dictionary and show its definition in `webView`. */
     @FXML
     public void lookUpWord() {
         String target = inputText.getText();
@@ -129,6 +140,11 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Look up word when pressing Enter at the selected word from the search list
+     *
+     * @param e key event
+     */
     @FXML
     public void selectWord(KeyEvent e) {
         if (searchList.getSelectionModel().getSelectedIndices().isEmpty()) {
@@ -150,6 +166,11 @@ public class ApplicationController {
         lastIndex = searchList.getSelectionModel().getSelectedIndex();
     }
 
+    /**
+     * Change scene to sentences translating (Google Translate).
+     *
+     * @param event action event
+     */
     @FXML
     public void changeToSentencesTranslatingApplication(ActionEvent event) {
         try {
@@ -170,13 +191,19 @@ public class ApplicationController {
         }
     }
 
+    /** Pronounce the English word that is currently showed in the `webView`. */
     @FXML
     public void playSound() {
         if (!lastLookUpWord.isEmpty()) {
-            TextToSpeech.playSoundGoogleTranslate(lastLookUpWord);
+            TextToSpeech.playSoundGoogleTranslateEnToVi(lastLookUpWord);
         }
     }
 
+    /**
+     * Open (pop up) export to file window for words export to file utility.
+     *
+     * @param event action event
+     */
     @FXML
     public void exportToFile(ActionEvent event) {
         try {
@@ -200,6 +227,11 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Open (pop up) information details of the application.
+     *
+     * @param event action event
+     */
     public void showInformation(ActionEvent event) {
         try {
             Parent root =
@@ -221,6 +253,11 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Open (pop up) the application instruction.
+     *
+     * @param event action event
+     */
     @FXML
     public void showInstruction(ActionEvent event) {
         try {
@@ -243,6 +280,11 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Open (pop up) the edit word window for the currently looked up word (in the `webView`).
+     *
+     * @param event action event
+     */
     @FXML
     public void editWordDefinition(ActionEvent event) {
         if (lastLookUpWord.isEmpty()) {
@@ -255,7 +297,8 @@ public class ApplicationController {
         if (Dictionary.lookUpWord(lastLookUpWord).equals("404")) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Lỗi");
-            alert.setContentText("Không tồn tại từ `" + lastLookUpWord + "` trong từ điển để chỉnh sửa!");
+            alert.setContentText(
+                    "Không tồn tại từ `" + lastLookUpWord + "` trong từ điển để chỉnh sửa!");
             alert.show();
             return;
         }
@@ -281,6 +324,7 @@ public class ApplicationController {
         }
     }
 
+    /** Open (pop up) delete confirmation for the last looked up word (in the `webView`). */
     @FXML
     public void deleteWord() {
         if (lastLookUpWord.isEmpty()) {
@@ -307,7 +351,8 @@ public class ApplicationController {
                     } else {
                         Alert alert1 = new Alert(AlertType.ERROR);
                         alert1.setTitle("Lỗi");
-                        alert1.setContentText("Không tồn tại từ `" + lastLookUpWord + "` trong từ điển để xóa!");
+                        alert1.setContentText(
+                                "Không tồn tại từ `" + lastLookUpWord + "` trong từ điển để xóa!");
                         alert1.show();
                     }
                 }
@@ -315,15 +360,18 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Open (pop up) the add word window for adding new words to the dictionary.
+     *
+     * @param event action event
+     */
     @FXML
     public void addingWord(ActionEvent event) {
         try {
             Parent root =
                     FXMLLoader.load(
                             Objects.requireNonNull(
-                                    getClass()
-                                            .getClassLoader()
-                                            .getResource("fxml/AddWord.fxml")));
+                                    getClass().getClassLoader().getResource("fxml/AddWord.fxml")));
             Stage addStage = new Stage();
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             addStage.initOwner(appStage);

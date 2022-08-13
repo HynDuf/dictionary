@@ -1,9 +1,8 @@
 package dictionary.ui;
 
 import dictionary.server.Dictionary;
-import javafx.event.ActionEvent;
 import java.nio.charset.StandardCharsets;
-import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -21,17 +20,25 @@ public class EditDefinitionController {
         EditDefinitionController.editingWord = editingWord;
     }
 
+    /** Set label text and set the current definition of the editing word. */
     @FXML
     private void initialize() {
         editLabel.setText("Chỉnh sửa giải nghĩa của từ `" + editingWord + "`");
         htmlEditor.setHtmlText(Dictionary.lookUpWord(editingWord));
     }
 
+    /**
+     * Save the new definition for the editing word in HTML format.
+     *
+     * @param event action event
+     */
     @FXML
     public void saveDefinition(ActionEvent event) {
         byte[] ptext = htmlEditor.getHtmlText().getBytes(StandardCharsets.ISO_8859_1);
         String definition = new String(ptext, StandardCharsets.UTF_8);
-        definition = definition.replace("<html dir=\"ltr\"><head></head><body contenteditable=\"true\">", "");
+        definition =
+                definition.replace(
+                        "<html dir=\"ltr\"><head></head><body contenteditable=\"true\">", "");
         definition = definition.replace("</body></html>", "");
         definition = definition.replace("\"", "'");
         if (Dictionary.updateWordDefinition(editingWord, definition)) {
@@ -50,6 +57,11 @@ public class EditDefinitionController {
         stage.close();
     }
 
+    /**
+     * Quit the editing window.
+     *
+     * @param event action event
+     */
     @FXML
     public void quitWindow(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -7,12 +7,8 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
     prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18"
     xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <ImageView fitHeight="546.0" fitWidth="849.0" layoutX="26.0" layoutY="23.0"
-            pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../image/SentencesTranslatingInstruction.png"/>
-            </image>
-        </ImageView>
-    </children>
+    <ImageView fitHeight="546.0" fitWidth="849.0" layoutX="26.0" layoutY="23.0"
+        pickOnBounds="true" preserveRatio="true">
+        <Image url="@../image/SentencesTranslatingInstruction.png"/>
+    </ImageView>
 </AnchorPane>

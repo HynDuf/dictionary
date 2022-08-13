@@ -229,6 +229,13 @@ public class Dictionary {
         out.close();
     }
 
+    /**
+     * Import words from `file` into the dictionary.
+     *
+     * @param file the file path to import words from
+     * @return string of information of success/failure
+     * @throws IOException file not found
+     */
     public static String importFromFile(String file) throws IOException {
         BufferedReader in =
                 new BufferedReader(

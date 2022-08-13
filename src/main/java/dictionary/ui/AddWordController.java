@@ -18,14 +18,21 @@ import javafx.stage.Stage;
 
 public class AddWordController {
     @FXML private Button browseButton;
+    @FXML private HTMLEditor htmlEditor;
+    @FXML private TextField inputText;
+    @FXML private Label fileLabel;
+
+    /** Focus on the `browseButton` when open the window. */
     @FXML
     private void initialize() {
         Platform.runLater(() -> browseButton.requestFocus());
     }
-    @FXML private HTMLEditor htmlEditor;
-    @FXML private TextField inputText;
 
-
+    /**
+     * Save the inputted word and its definition to the dictionary as HTML text format.
+     *
+     * @param event action event
+     */
     @FXML
     public void saveWord(ActionEvent event) {
         String target = inputText.getText();
@@ -49,14 +56,24 @@ public class AddWordController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
-    @FXML private Label fileLabel;
+
+    /**
+     * Choose the file and print its path into the Label.
+     *
+     * @param event action event
+     */
     @FXML
     public void chooseFile(ActionEvent event) {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         String file = HelperUI.chooseFile(appStage);
-        fileLabel.setText(file);
+        fileLabel.setText("  " + file);
     }
 
+    /**
+     * Import words from the selected file into the dictionary.
+     *
+     * @param event action event
+     */
     @FXML
     public void submitImport(ActionEvent event) {
         String filePath = fileLabel.getText();
@@ -81,6 +98,12 @@ public class AddWordController {
             stage.close();
         }
     }
+
+    /**
+     * Quit the window.
+     *
+     * @param event action event
+     */
     @FXML
     public void quitWindow(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -6,17 +6,35 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="122.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ExportToFileController">
-    <TextField fx:id="fileName" layoutX="20.0" layoutY="20.0" prefHeight="30.0" prefWidth="240.0" promptText="Enter the exported file's name..." />
-    <Button fx:id="browseButton" layoutX="20.0" layoutY="65.0" onAction="#chooseDir" prefHeight="30.0" prefWidth="70.0" text="Browse...">
+<AnchorPane prefHeight="206.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ExportToFileController">
+    <TextField fx:id="fileName" layoutX="17.0" layoutY="95.0" prefHeight="34.0" prefWidth="475.0" promptText="Tên file xuất...">
         <font>
-            <Font size="11.0" />
+            <Font size="14.0" />
+        </font>
+    </TextField>
+    <Button fx:id="browseButton" layoutX="17.0" layoutY="148.0" onAction="#chooseDir" prefHeight="34.0" prefWidth="85.0" text="Browse...">
+        <font>
+            <Font size="14.0" />
         </font>
     </Button>
-    <Label fx:id="dirLabel" layoutX="100.0" layoutY="65.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #ded8d7;" />
-    <Button layoutX="350.0" layoutY="65.0" onAction="#submitExport" prefHeight="30.0" prefWidth="70.0" text="Export">
+    <Label fx:id="dirLabel" layoutX="109.5" layoutY="148.0" prefHeight="34.0" prefWidth="302.0" style="-fx-background-color: #ded8d7;">
         <font>
-            <Font size="11.0" />
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <Button layoutX="419.0" layoutY="148.0" onAction="#submitExport" prefHeight="34.0" prefWidth="73.0" text="Xuất">
+        <font>
+            <Font size="14.0" />
         </font>
     </Button>
+    <Label alignment="CENTER" layoutX="17.0" layoutY="14.0" prefHeight="34.0" prefWidth="475.0" text="Nhập tên file xuất và chọn thư mục để lưu file tương ứng">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+   <Label alignment="CENTER" layoutX="17.0" layoutY="48.0" prefHeight="34.0" prefWidth="475.0" text="Mỗi dòng là từ và nghĩa tương ứng ngăn cách nhau bởi một kí tự TAB">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Label>
 </AnchorPane>

@@ -2,12 +2,8 @@ package dictionary.server;
 
 import dictionary.server.database.Database;
 import dictionary.server.google_translate_api.TranslatorApi;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class DictionaryManagement {
@@ -183,8 +179,6 @@ public class DictionaryManagement {
 
     /** Option 6. Insert word from file `importFromFile.txt`. */
     public static void insertFromFile() {
-
-        /* TODO: pass the path to the file as a parameter */
         System.out.println("==> Enter the path to insert: ");
         String file = Helper.readLine();
         try {
@@ -251,7 +245,7 @@ public class DictionaryManagement {
         if (option == 1) {
             TextToSpeech.playSoundKevin16(text);
         } else {
-            TextToSpeech.playSoundGoogleTranslate(text);
+            TextToSpeech.playSoundGoogleTranslateEnToVi(text);
         }
         System.out.println("Done...");
         Helper.pressEnterToContinue();

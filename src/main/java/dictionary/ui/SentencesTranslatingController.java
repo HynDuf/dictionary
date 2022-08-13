@@ -10,22 +10,38 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class SentencesTranslatingController {
-    @FXML private TextField sourceText;
-    @FXML private TextField sinkText;
+    @FXML private TextArea sourceText;
+    @FXML private TextArea sinkText;
+    private boolean enToVi = true;
+    @FXML private Label upButton;
+    @FXML private Label downButton;
 
     public SentencesTranslatingController() {}
 
+    /**
+     * Translate the text from English to Vietnamese (or reverse, depends on current state `enToVi`)
+     * and output the content to the sinkText.
+     */
     @FXML
     public void translateEnToVi() {
         String source = sourceText.getText();
-        sinkText.setText(TranslatorApi.translateEnToVi(source));
+        sinkText.setText(
+                (enToVi
+                        ? TranslatorApi.translateEnToVi(source)
+                        : TranslatorApi.translateViToEn(source)));
     }
 
+    /**
+     * Change scene from Sentences Translator to the main Application.
+     *
+     * @param event action event
+     */
     @FXML
     public void changeToApplication(ActionEvent event) {
         try {
@@ -46,6 +62,11 @@ public class SentencesTranslatingController {
         }
     }
 
+    /**
+     * Open (popup) a window showing instruction on how to use the sentence translator.
+     *
+     * @param event action event
+     */
     @FXML
     public void showSentencesInstruction(ActionEvent event) {
         try {
@@ -70,9 +91,33 @@ public class SentencesTranslatingController {
         }
     }
 
+    /**
+     * Play sound TTS the source text (English to Vietnamese or reverse depends on current state
+     * `enToVi`).
+     */
     @FXML
     public void textToSpeech() {
         String source = sourceText.getText();
-        TextToSpeech.playSoundGoogleTranslate(source);
+        if (enToVi) {
+            TextToSpeech.playSoundGoogleTranslateEnToVi(source);
+        } else {
+            TextToSpeech.playSoundGoogleTranslateViToEn(source);
+        }
+    }
+
+    /**
+     * Change the current state `enToVi` to switch between English to Vietnamese or Vietnamese to
+     * English.
+     */
+    @FXML
+    public void swapLanguage() {
+        enToVi = !enToVi;
+        if (enToVi) {
+            upButton.setText("Tiếng Anh");
+            downButton.setText("Tiếng Việt");
+        } else {
+            upButton.setText("Tiếng Việt");
+            downButton.setText("Tiếng Anh");
+        }
     }
 }

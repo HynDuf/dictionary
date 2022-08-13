@@ -5,34 +5,32 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
     prefHeight="159.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/18"
     xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <Text layoutX="24.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Về ứng dụng" wrappingWidth="474.13670349121094"/>
-        <Text layoutX="42.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Từ điển E-V (v1.0)" wrappingWidth="474.13670349121094"/>
-        <Text layoutX="42.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Hoàn thiện: 11/8/2022" wrappingWidth="474.13670349121094"/>
-        <Text layoutX="42.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Bản quyền thuộc N1-02-OOP" wrappingWidth="474.13670349121094"/>
-        <Text layoutX="42.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            text="Dữ liệu từ API Google Translate" wrappingWidth="474.13670349121094"/>
-        <Text layoutX="24.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tính năng"
-            wrappingWidth="474.13670349121094"/>
-        <Text layoutX="42.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch từ"
-            wrappingWidth="474.13670349121094"/>
-        <Text layoutX="42.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch câu"
-            wrappingWidth="474.13670349121094"/>
-        <Text layoutX="25.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-            wrappingWidth="474.13670349121094"/>
-        <Text layoutX="25.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-            wrappingWidth="474.13670349121094"/>
-        <Text layoutX="25.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-            wrappingWidth="474.13670349121094"/>
-        <Text layoutX="25.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-            wrappingWidth="474.13670349121094"/>
-        <Text layoutX="25.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-            wrappingWidth="474.13670349121094"/>
-        <Text layoutX="25.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-            wrappingWidth="474.13670349121094"/>
-    </children>
+    <Text layoutX="24.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0"
+        text="Về ứng dụng" wrappingWidth="474.13670349121094"/>
+    <Text layoutX="42.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0"
+        text="Từ điển E-V (v1.0)" wrappingWidth="474.13670349121094"/>
+    <Text layoutX="42.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0"
+        text="Hoàn thiện: 11/8/2022" wrappingWidth="474.13670349121094"/>
+    <Text layoutX="42.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0"
+        text="Bản quyền thuộc N1-02-OOP" wrappingWidth="474.13670349121094"/>
+    <Text layoutX="42.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0"
+        text="Dữ liệu từ API Google Translate" wrappingWidth="474.13670349121094"/>
+    <Text layoutX="24.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tính năng"
+        wrappingWidth="474.13670349121094"/>
+    <Text layoutX="42.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch từ"
+        wrappingWidth="474.13670349121094"/>
+    <Text layoutX="42.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch câu"
+        wrappingWidth="474.13670349121094"/>
+    <Text layoutX="25.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
+        wrappingWidth="474.13670349121094"/>
+    <Text layoutX="25.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
+        wrappingWidth="474.13670349121094"/>
+    <Text layoutX="25.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
+        wrappingWidth="474.13670349121094"/>
+    <Text layoutX="25.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
+        wrappingWidth="474.13670349121094"/>
+    <Text layoutX="25.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
+        wrappingWidth="474.13670349121094"/>
+    <Text layoutX="25.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
+        wrappingWidth="474.13670349121094"/>
 </AnchorPane>

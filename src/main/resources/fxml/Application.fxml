@@ -6,10 +6,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
-<AnchorPane prefHeight="580.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16"
+<AnchorPane prefHeight="580.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18"
     xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
     <TextField fx:id="inputText" layoutX="33.0" layoutY="29.0" onAction="#lookUpWord"
-        onKeyTyped="#prepareSearchList" onKeyPressed="#changeFocusDown" prefHeight="51.0"
+        onKeyPressed="#changeFocusDown" onKeyTyped="#prepareSearchList" prefHeight="51.0"
         prefWidth="239.0" promptText="Tìm kiếm">
         <font>
             <Font size="14.0"/>
@@ -17,9 +17,10 @@
     </TextField>
     <ListView fx:id="searchList" layoutX="32.0" layoutY="97.0" onKeyPressed="#selectWord"
         prefHeight="456.0" prefWidth="242.0"/>
-    <WebView fx:id="webView" layoutX="300.0" layoutY="97.0" prefHeight="456.0" prefWidth="490.0"/>
-    <Button layoutX="300.0" layoutY="29.0" mnemonicParsing="false" onAction="#addingWord" prefHeight="51.0"
-        prefWidth="102.0" text="Thêm từ">
+    <WebView fx:id="webView" fontScale="1.2" layoutX="300.0" layoutY="97.0" prefHeight="456.0"
+        prefWidth="490.0"/>
+    <Button layoutX="300.0" layoutY="29.0" mnemonicParsing="false" onAction="#addingWord"
+        prefHeight="51.0" prefWidth="102.0" text="Thêm từ">
         <font>
             <Font size="14.0"/>
         </font>
@@ -48,16 +49,14 @@
             <Font size="14.0"/>
         </font>
     </Button>
-    <Button onAction="#editWordDefinition" layoutX="802.0" layoutY="145.0" mnemonicParsing="false"
-        prefHeight="34.0"
-        prefWidth="83.0" text="Sửa từ">
+    <Button layoutX="802.0" layoutY="145.0" mnemonicParsing="false" onAction="#editWordDefinition"
+        prefHeight="34.0" prefWidth="83.0" text="Sửa từ">
         <font>
             <Font size="14.0"/>
         </font>
     </Button>
-    <Button onAction="#deleteWord" layoutX="802.0" layoutY="193.0" mnemonicParsing="false"
-        prefHeight="34.0"
-        prefWidth="83.0" text="Xóa từ">
+    <Button layoutX="802.0" layoutY="193.0" mnemonicParsing="false" onAction="#deleteWord"
+        prefHeight="34.0" prefWidth="83.0" text="Xóa từ">
         <font>
             <Font size="14.0"/>
         </font>

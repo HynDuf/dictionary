@@ -21,6 +21,15 @@ public class History {
         return historySearch;
     }
 
+    /**
+     * Load history file everytime the application is open.
+     *
+     * <p>The file is in ./dictionary-user-data/words-search-history.txt where `./` is the relative
+     * directory you run the application from.
+     *
+     * <p>If dictionary-user-data or words-search-history.txt haven't existed yet, created them.
+     * Otherwise, load current words in words-search-history.txt to the ArrayList.
+     */
     public static void loadHistory() {
         File dir = new File("dictionary-user-data/");
         if (!dir.exists()) {
@@ -63,11 +72,17 @@ public class History {
         refactorHistory();
     }
 
+    /**
+     * Add word to history. Maintain at max `MAX_WORDS_HISTORY` most recent word in the ArrayList.
+     *
+     * @param target the word to add
+     */
     public static void addWordToHistory(String target) {
         historySearch.add(target);
         refactorHistory();
     }
 
+    /** Write the words in the ArrayList to `dictionary-user-data/words-search-history.txt`. */
     public static void exportHistory() {
         try {
             Writer out =
@@ -89,6 +104,10 @@ public class History {
         }
     }
 
+    /**
+     * Refactor the history searches. Maintain at max `MAX_WORDS_HISTORY` most recent word in the
+     * ArrayList. Exported to `dictionary-user-data/words-search-history.txt` after that.
+     */
     public static void refactorHistory() {
         if (historySearch.size() <= MAX_WORDS_HISTORY) {
             return;

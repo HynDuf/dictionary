@@ -18,18 +18,28 @@ public class ExportToFileController {
     @FXML private Label dirLabel;
     @FXML private TextField fileName;
 
+    /** Focus on the browseButton when open the window. */
     @FXML
     private void initialize() {
         Platform.runLater(() -> browseButton.requestFocus());
     }
 
+    /**
+     * Choose the directory to save the exported file to.
+     *
+     * @param event action event
+     */
     @FXML
     public void chooseDir(ActionEvent event) {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         String dir = HelperUI.chooseDir(appStage);
-        dirLabel.setText(dir);
+        dirLabel.setText("  " + dir);
     }
 
+    /**
+     * Export all the words into the selected directory and file name. Each line of the exported
+     * file is a word with its definition separated by a TAB character.
+     */
     @FXML
     public void submitExport() {
         String file = fileName.getText();
@@ -39,7 +49,8 @@ public class ExportToFileController {
                 Dictionary.exportToFile(dirPath + "\\" + file);
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Thông báo");
-                alert.setContentText("Thành công xuất dữ liệu ra file `" + dirPath + "\\" + file + "`");
+                alert.setContentText(
+                        "Thành công xuất dữ liệu ra file `" + dirPath + "\\" + file + "`");
                 alert.show();
             } catch (IOException e) {
                 e.printStackTrace();
