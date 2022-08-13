@@ -6,6 +6,7 @@ import dictionary.server.Trie;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -87,7 +89,7 @@ public class ApplicationController {
     @FXML
     public void playSound() {
         if (!lastLookUpWord.isEmpty()) {
-            TextToSpeech.playSound(lastLookUpWord);
+            TextToSpeech.playSoundGoogleTranslate(lastLookUpWord);
         }
     }
 
@@ -169,11 +171,11 @@ public class ApplicationController {
         EditDefinitionController.setEditingWord(lastLookUpWord);
         try {
             Parent root =
-                FXMLLoader.load(
-                    Objects.requireNonNull(
-                        getClass()
-                            .getClassLoader()
-                            .getResource("fxml/EditDefinition.fxml")));
+                    FXMLLoader.load(
+                            Objects.requireNonNull(
+                                    getClass()
+                                            .getClassLoader()
+                                            .getResource("fxml/EditDefinition.fxml")));
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Stage newStage = new Stage();
             Scene scene = new Scene(root);
@@ -185,6 +187,40 @@ public class ApplicationController {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void deleteWord() {
+        if (lastLookUpWord.isEmpty()) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Thông báo");
+            alert.setContentText("Chưa chọn từ để chỉnh sửa!");
+            alert.show();
+        } else {
+
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Xóa từ");
+            alert.setHeaderText(
+                    "Bạn có chắc chắn muốn xóa từ `"
+                            + lastLookUpWord
+                            + "` khỏi từ điển hay không?");
+            Optional<ButtonType> option = alert.showAndWait();
+            if (option.isPresent()) {
+                if (option.get() == ButtonType.OK) {
+                    if (Dictionary.deleteWord(lastLookUpWord)) {
+                        Alert alert1 = new Alert(AlertType.INFORMATION);
+                        alert1.setTitle("Thông báo");
+                        alert1.setContentText("Xóa từ `" + lastLookUpWord + "` thành công!");
+                        alert1.show();
+                    } else {
+                        Alert alert1 = new Alert(AlertType.ERROR);
+                        alert1.setTitle("Lỗi");
+                        alert1.setContentText("Xóa từ `" + lastLookUpWord + "` không thành công!");
+                        alert1.show();
+                    }
+                }
+            }
         }
     }
 }

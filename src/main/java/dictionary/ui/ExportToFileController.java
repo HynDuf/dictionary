@@ -1,22 +1,27 @@
 package dictionary.ui;
 
 import dictionary.server.Dictionary;
+import java.io.IOException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 
 public class ExportToFileController {
     @FXML private Button browseButton;
+    @FXML private Label dirLabel;
+    @FXML private TextField fileName;
+
     @FXML
     private void initialize() {
         Platform.runLater(() -> browseButton.requestFocus());
     }
-    @FXML private Label dirLabel;
 
     @FXML
     public void chooseDir(ActionEvent event) {
@@ -25,14 +30,24 @@ public class ExportToFileController {
         dirLabel.setText(dir);
     }
 
-    @FXML private TextField fileName;
     @FXML
     public void submitExport() {
         String file = fileName.getText();
-        System.out.println(file);
         String dirPath = dirLabel.getText();
         if (!dirPath.isEmpty() && !file.isEmpty()) {
-            // Dictionary.exportAllWords(dirPath)
+            try {
+                Dictionary.exportToFile(dirPath + "\\" + file);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Thông báo");
+                alert.setContentText("Thành công xuất dữ liệu ra file `" + dirPath + "\\" + file + "`");
+                alert.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setContentText("Không tìm thấy đường dẫn của file!");
+                alert.show();
+            }
         }
     }
 }

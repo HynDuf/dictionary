@@ -1,12 +1,16 @@
 package dictionary.ui;
 
 import dictionary.server.Dictionary;
+import javafx.event.ActionEvent;
 import java.nio.charset.StandardCharsets;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.web.HTMLEditor;
+import javafx.stage.Stage;
 
 public class EditDefinitionController {
     private static String editingWord;
@@ -42,5 +46,11 @@ public class EditDefinitionController {
                     "Cập nhật giải nghĩa của từ `" + editingWord + "` không thành công!");
             alert.show();
         }
+    }
+
+    @FXML
+    public void quitWindow(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

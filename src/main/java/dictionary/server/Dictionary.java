@@ -1,12 +1,17 @@
 package dictionary.server;
 
 import dictionary.server.database.Database;
-
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Dictionary {
 
-    private final static ArrayList<Word> words = new ArrayList<>();
+    private static final ArrayList<Word> words = new ArrayList<>();
 
     /**
      * Get all words in the dictionary.
@@ -203,5 +208,21 @@ public class Dictionary {
                     .append('\n');
         }
         return result.toString();
+    }
+
+    /**
+     * Export all words and their definitions to the file `exportPath`.
+     *
+     * @param exportPath the path of the exported file
+     * @throws IOException path not found
+     */
+    public static void exportToFile(String exportPath) throws IOException {
+        Writer out =
+                new BufferedWriter(
+                        new OutputStreamWriter(
+                                new FileOutputStream(exportPath), StandardCharsets.UTF_8));
+        String export = Dictionary.exportAllWords();
+        out.write(export);
+        out.close();
     }
 }

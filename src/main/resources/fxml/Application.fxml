@@ -54,13 +54,15 @@
             <Font size="14.0"/>
         </font>
     </Button>
-    <Button onAction="#editWordDefinition" layoutX="802.0" layoutY="145.0" mnemonicParsing="false" prefHeight="34.0"
+    <Button onAction="#editWordDefinition" layoutX="802.0" layoutY="145.0" mnemonicParsing="false"
+        prefHeight="34.0"
         prefWidth="83.0" text="Sửa từ">
         <font>
             <Font size="14.0"/>
         </font>
     </Button>
-    <Button layoutX="802.0" layoutY="193.0" mnemonicParsing="false" prefHeight="34.0"
+    <Button onAction="#deleteWord" layoutX="802.0" layoutY="193.0" mnemonicParsing="false"
+        prefHeight="34.0"
         prefWidth="83.0" text="Xóa từ">
         <font>
             <Font size="14.0"/>

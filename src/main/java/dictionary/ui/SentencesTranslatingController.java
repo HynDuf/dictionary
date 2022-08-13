@@ -1,5 +1,6 @@
 package dictionary.ui;
 
+import dictionary.server.TextToSpeech;
 import dictionary.server.google_translate_api.TranslatorApi;
 import java.io.IOException;
 import java.util.Objects;
@@ -67,5 +68,11 @@ public class SentencesTranslatingController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void textToSpeech() {
+        String source = sourceText.getText();
+        TextToSpeech.playSoundGoogleTranslate(source);
     }
 }
