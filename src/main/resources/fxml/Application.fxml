@@ -16,6 +16,7 @@
         </font>
     </TextField>
     <ListView fx:id="searchList" layoutX="32.0" layoutY="97.0" onKeyPressed="#selectWord"
+        onMouseClicked="#selectWordDoubleClick"
         prefHeight="456.0" prefWidth="242.0"/>
     <WebView fx:id="webView" fontScale="1.2" layoutX="300.0" layoutY="97.0" prefHeight="456.0"
         prefWidth="490.0"/>

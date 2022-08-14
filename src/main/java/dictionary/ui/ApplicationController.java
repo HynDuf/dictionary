@@ -26,6 +26,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
@@ -164,6 +166,26 @@ public class ApplicationController {
             }
         }
         lastIndex = searchList.getSelectionModel().getSelectedIndex();
+    }
+
+    /**
+     * Double-click a word in the search list to look up its definition.
+     *
+     * <p>The double-clicked word will be added to the history though.
+     *
+     * @param mouseEvent mouse event
+     */
+    @FXML
+    public void selectWordDoubleClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+            String target = searchList.getSelectionModel().getSelectedItem();
+            if (target.startsWith("#")) {
+                inputText.setText(target.substring(1));
+            } else {
+                inputText.setText(target);
+            }
+            lookUpWord();
+        }
     }
 
     /**
