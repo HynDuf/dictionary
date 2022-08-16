@@ -1,4 +1,4 @@
-package dictionary.server.google_translate_api;
+package dictionary.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,22 +52,22 @@ public class TranslatorApi {
      * @return the translation text in `langTo`
      */
     private static String translate(String langFrom, String langTo, String text)
-            throws IOException {
+        throws IOException {
         String urlStr =
-                "https://script.google.com/macros/s/AKfycby3AOWmhe32TgV9nW-Q0TyGOEyCHQeFiIn7hRgy5m8jHPaXDl2GdToyW_3Ys5MTbK6wjg/exec"
-                        + "?q="
-                        + URLEncoder.encode(text, StandardCharsets.UTF_8)
-                        + "&target="
-                        + langTo
-                        + "&source="
-                        + langFrom;
+            "https://script.google.com/macros/s/AKfycby3AOWmhe32TgV9nW-Q0TyGOEyCHQeFiIn7hRgy5m8jHPaXDl2GdToyW_3Ys5MTbK6wjg/exec"
+                + "?q="
+                + URLEncoder.encode(text, StandardCharsets.UTF_8)
+                + "&target="
+                + langTo
+                + "&source="
+                + langFrom;
         URL url = new URL(urlStr);
         StringBuilder response = new StringBuilder();
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         BufferedReader in =
-                new BufferedReader(
-                        new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+            new BufferedReader(
+                new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);

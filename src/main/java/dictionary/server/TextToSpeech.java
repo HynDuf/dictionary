@@ -42,7 +42,7 @@ public class TextToSpeech {
     public static void playSoundGoogleTranslate(String text) {
         try {
             String api =
-                    "http://translate.google.com/translate_tts?ie=UTF-8&tl="
+                    "https://translate.google.com/translate_tts?ie=UTF-8&tl="
                             + "en"
                             + "&client=tw-ob&q="
                             + URLEncoder.encode(text, StandardCharsets.UTF_8);

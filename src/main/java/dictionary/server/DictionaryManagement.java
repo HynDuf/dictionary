@@ -1,35 +1,17 @@
 package dictionary.server;
 
-import static dictionary.server.History.exportHistory;
-import static dictionary.server.History.historySearch;
-
-import dictionary.server.database.Database;
-import dictionary.server.google_translate_api.TranslatorApi;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class DictionaryManagement {
 
-    private static final Dictionary dictionary = new Dictionary();
     private static final int WORDS_PER_PAGE = 10;
-
-    /** Set up Database. */
-    public static void setUpDatabase() {
-        Database.connectToDatabase();
-        ArrayList<String> targets = Database.getAllWordsTarget();
-        for (String word : targets) {
-            Trie.insert(word);
-        }
-    }
+    public static Dictionary dictionary;
 
     /** Option 1. Look up a word's definition. */
     public static void lookUpWord() {
@@ -37,7 +19,6 @@ public class DictionaryManagement {
         String target = Helper.readLine();
         String definition = dictionary.lookUpWord(target);
         definition = Helper.htmlToText(definition);
-        exportHistory(target);
         if (definition.equals("404")) {
             System.out.println("The word you looked up isn't in the dictionary!\n");
         } else {
@@ -192,15 +173,13 @@ public class DictionaryManagement {
 
     /** Option 6. Insert word from file `importFromFile.txt`. */
     public static void insertFromFile() {
-
-        /* TODO: pass the path to the file as a parameter */
-        System.out.println("==> Enter the path to insert: ");
-        String importFromFile = Helper.readLine();
+        System.out.print("==> Enter the path to insert: ");
+        String filePath = Helper.readLine();
         try {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(
-                                    new FileInputStream(importFromFile), StandardCharsets.UTF_8));
+                                    new FileInputStream(filePath), StandardCharsets.UTF_8));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 int pos = inputLine.indexOf("\t");
@@ -217,10 +196,10 @@ public class DictionaryManagement {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.out.println("Couldn't find " + importFromFile);
+            System.out.println("Couldn't find " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Couldn't read " + importFromFile);
+            System.out.println("Couldn't read " + filePath);
         }
 
         Helper.pressEnterToContinue();
@@ -231,7 +210,6 @@ public class DictionaryManagement {
         try {
             System.out.print("==> Enter the prefix to search: ");
             String target = Helper.readLine();
-            exportHistory(target);
             ArrayList<String> searchedWordTargets = Trie.search(target);
             ArrayList<Word> searchedWords = dictionary.fillDefinition(searchedWordTargets);
             if (!searchedWords.isEmpty()) {
@@ -286,17 +264,11 @@ public class DictionaryManagement {
 
     /** Option 10. Export to file `exportToFile.txt` */
     public static void dictionaryExportToFile() {
-        System.out.println("==> Enter the path to export: ");
-        String exportToFile = Helper.readLine();
+        System.out.print("==> Enter the path to export: ");
+        String filePath = Helper.readLine();
         try {
-            Writer out =
-                    new BufferedWriter(
-                            new OutputStreamWriter(
-                                    new FileOutputStream(exportToFile), StandardCharsets.UTF_8));
-            String export = dictionary.exportAllWords();
-            out.write(export);
-            out.close();
-            System.out.println("Exported successfully to " + exportToFile);
+            dictionary.exportToFile(filePath);
+            System.out.println("Exported successfully to " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("An error occurred.`");

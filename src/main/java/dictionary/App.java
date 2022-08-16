@@ -1,10 +1,10 @@
 package dictionary;
 
+import dictionary.server.DatabaseDictionary;
 import dictionary.server.DictionaryManagement;
 import dictionary.server.Helper;
-import dictionary.server.database.Database;
-
-import static dictionary.server.History.insertHistory;
+import dictionary.server.LocalDictionary;
+import java.sql.SQLException;
 
 public class App {
 
@@ -20,16 +20,26 @@ public class App {
     private static final int EXPORT_FILE = 10;
     private static final int EXIT = 11;
 
-    public static void databaseOption() {
+    /**
+     * Selection dictionary using MYSQL Database or not.
+     */
+    public static void selectDictionaryType() {
         while (true) {
             System.out.print(
                     "Do you want to use SQL Database? (Requires Database already set up)\n"
                             + "==> Option [y(es)/n(o)]: ");
             String option = Helper.readLine();
             if (option.equals("y") || option.equals("yes")) {
-                DictionaryManagement.setUpDatabase();
+                DictionaryManagement.dictionary = new DatabaseDictionary();
+                try {
+                    DictionaryManagement.dictionary.initialize();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    System.out.println("Couldn't connect to SQL! Please make sure that you have already set up the MYSQL database.");
+                }
                 return;
             } else if (option.equals("n") || option.equals("no")) {
+                DictionaryManagement.dictionary = new LocalDictionary();
                 return;
             } else {
                 System.out.println("Invalid option!\nPlease type `y` for yes and `n` for no.");
@@ -74,42 +84,18 @@ public class App {
      */
     public static void executeSelection(int option) {
         switch (option) {
-            case LOOK_UP:
-                DictionaryManagement.lookUpWord();
-                break;
-            case DISPLAY_WORDS:
-                DictionaryManagement.showWords();
-                break;
-            case INSERT_CMD:
-                DictionaryManagement.insertFromCommandline();
-                break;
-            case DELETE:
-                DictionaryManagement.deleteWord();
-                break;
-            case UPDATE:
-                DictionaryManagement.updateWord();
-                break;
-            case INSERT_FILE:
-                DictionaryManagement.insertFromFile();
-                break;
-            case SEARCH:
-                DictionaryManagement.searchWords();
-                break;
-            case TRANSLATE_E_V:
-                DictionaryManagement.translateEnToVi();
-                break;
-            case TEXT_TO_SPEECH:
-                DictionaryManagement.textToSpeech();
-                break;
-            case EXPORT_FILE:
-                DictionaryManagement.dictionaryExportToFile();
-                break;
-            case EXIT:
-                DictionaryManagement.exitApplication();
-                break;
-            default:
-                System.out.println("Invalid option!");
-                break;
+            case LOOK_UP -> DictionaryManagement.lookUpWord();
+            case DISPLAY_WORDS -> DictionaryManagement.showWords();
+            case INSERT_CMD -> DictionaryManagement.insertFromCommandline();
+            case DELETE -> DictionaryManagement.deleteWord();
+            case UPDATE -> DictionaryManagement.updateWord();
+            case INSERT_FILE -> DictionaryManagement.insertFromFile();
+            case SEARCH -> DictionaryManagement.searchWords();
+            case TRANSLATE_E_V -> DictionaryManagement.translateEnToVi();
+            case TEXT_TO_SPEECH -> DictionaryManagement.textToSpeech();
+            case EXPORT_FILE -> DictionaryManagement.dictionaryExportToFile();
+            case EXIT -> DictionaryManagement.exitApplication();
+            default -> System.out.println("Invalid option!");
         }
     }
 
@@ -119,13 +105,12 @@ public class App {
      * @param args cmd arguments
      */
     public static void main(String[] args) {
-        insertHistory();
-        databaseOption();
+        selectDictionaryType();
         int option;
         do {
             option = displayOptions();
             executeSelection(option);
         } while (option != EXIT);
-        Database.closeDatabase();
+        DictionaryManagement.dictionary.close();
     }
 }

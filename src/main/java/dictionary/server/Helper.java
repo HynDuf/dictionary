@@ -93,8 +93,7 @@ public class Helper {
     private static StringBuffer buildStringFromNode(Node node) {
         StringBuffer buffer = new StringBuffer();
 
-        if (node instanceof TextNode) {
-            TextNode textNode = (TextNode) node;
+        if (node instanceof TextNode textNode) {
             buffer.append(textNode.text().trim());
         }
 
@@ -102,8 +101,7 @@ public class Helper {
             buffer.append(buildStringFromNode(childNode));
         }
 
-        if (node instanceof Element) {
-            Element element = (Element) node;
+        if (node instanceof Element element) {
             String tagName = element.tagName();
             if ("p".equals(tagName) || "br".equals(tagName)) {
                 buffer.append("\n");
