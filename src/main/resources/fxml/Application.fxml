@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 <AnchorPane prefHeight="580.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17"
-    xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.ApplicationController">
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.controller.Application">
     <TextField fx:id="inputText" layoutX="33.0" layoutY="29.0" onAction="#lookUpWord"
         onKeyPressed="#changeFocusDown" onKeyTyped="#prepareSearchList" prefHeight="51.0"
         prefWidth="239.0" promptText="Tìm kiếm">

@@ -1,4 +1,4 @@
-package dictionary.server.google_translate_api;
+package dictionary.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;

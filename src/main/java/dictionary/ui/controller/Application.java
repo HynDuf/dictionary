@@ -1,6 +1,7 @@
-package dictionary.ui;
+package dictionary.ui.controller;
 
-import dictionary.server.Dictionary;
+import static dictionary.App.dictionary;
+
 import dictionary.server.History;
 import dictionary.server.TextToSpeech;
 import dictionary.server.Trie;
@@ -34,19 +35,21 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-public class ApplicationController {
+public class Application {
     private String lastLookUpWord = "";
     @FXML private TextField inputText;
     @FXML private ListView<String> searchList;
     @FXML private WebView webView;
     private int lastIndex = 0;
+    private Image historyIcon;
 
-    public ApplicationController() {}
+    public Application() {}
 
     /** Focus on the inputText TextField when first open. Prepare the search list after that. */
     @FXML
     private void initialize() {
         Platform.runLater(() -> inputText.requestFocus());
+        prepareHistoryIcon();
         prepareSearchList();
     }
 
@@ -62,6 +65,17 @@ public class ApplicationController {
             if (!searchList.getItems().isEmpty()) {
                 searchList.getSelectionModel().select(0);
             }
+        }
+    }
+
+    /** Load the history icon into its corresponding icon image. */
+    private void prepareHistoryIcon() {
+        try {
+            historyIcon =
+                    new Image(new FileInputStream("src/main/resources/icon/history-icon.png"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -98,20 +112,12 @@ public class ApplicationController {
                                     setText(item);
                                     setFont(Font.font(14));
                                 } else if (item != null) {
-                                    try {
-                                        Image fxImage =
-                                                new Image(
-                                                        new FileInputStream(
-                                                                "src/main/resources/icon/history-icon.png"));
-                                        ImageView imageView = new ImageView(fxImage);
-                                        imageView.setFitHeight(14);
-                                        imageView.setFitWidth(14);
-                                        setGraphic(imageView);
-                                        setText("  " + item.substring(1));
-                                        setFont(Font.font(14));
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                    ImageView imageView = new ImageView(historyIcon);
+                                    imageView.setFitHeight(14);
+                                    imageView.setFitWidth(14);
+                                    setGraphic(imageView);
+                                    setText("  " + item.substring(1));
+                                    setFont(Font.font(14));
                                 }
                             }
                         };
@@ -130,7 +136,7 @@ public class ApplicationController {
             History.addWordToHistory(target);
         }
 
-        String definition = Dictionary.lookUpWord(target);
+        String definition = dictionary.lookUpWord(target);
         if (definition.equals("404")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Thông báo");
@@ -316,7 +322,7 @@ public class ApplicationController {
             alert.show();
             return;
         }
-        if (Dictionary.lookUpWord(lastLookUpWord).equals("404")) {
+        if (dictionary.lookUpWord(lastLookUpWord).equals("404")) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Lỗi");
             alert.setContentText(
@@ -324,7 +330,7 @@ public class ApplicationController {
             alert.show();
             return;
         }
-        EditDefinitionController.setEditingWord(lastLookUpWord);
+        EditDefinition.setEditingWord(lastLookUpWord);
         try {
             Parent root =
                     FXMLLoader.load(
@@ -365,7 +371,7 @@ public class ApplicationController {
             Optional<ButtonType> option = alert.showAndWait();
             if (option.isPresent()) {
                 if (option.get() == ButtonType.OK) {
-                    if (Dictionary.deleteWord(lastLookUpWord)) {
+                    if (dictionary.deleteWord(lastLookUpWord)) {
                         Alert alert1 = new Alert(AlertType.INFORMATION);
                         alert1.setTitle("Thông báo");
                         alert1.setContentText("Xóa từ `" + lastLookUpWord + "` thành công!");
@@ -390,10 +396,10 @@ public class ApplicationController {
     @FXML
     public void addingWord(ActionEvent event) {
         try {
-            Parent root =
-                    FXMLLoader.load(
-                            Objects.requireNonNull(
-                                    getClass().getClassLoader().getResource("fxml/AddWord.fxml")));
+            FXMLLoader loader =
+                    new FXMLLoader(getClass().getClassLoader().getResource("fxml/AddWord.fxml"));
+            Parent root = loader.load();
+            AddWord controller = loader.getController();
             Stage addStage = new Stage();
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             addStage.initOwner(appStage);
@@ -402,6 +408,7 @@ public class ApplicationController {
             addStage.setResizable(false);
             addStage.setScene(scene);
             addStage.initModality(Modality.APPLICATION_MODAL);
+            addStage.setOnCloseRequest(e -> controller.closeWhileImporting());
             addStage.show();
         } catch (IOException e) {
             e.printStackTrace();

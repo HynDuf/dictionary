@@ -1,7 +1,9 @@
 package dictionary.server;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.CharBuffer;
-import java.util.Scanner;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,35 +11,6 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 
 public class Helper {
-    private static final Scanner sc = new Scanner(System.in);
-
-    /**
-     * Read the next integer.
-     *
-     * @return the integer
-     */
-    public static int readInteger() {
-        return sc.nextInt();
-    }
-
-    /**
-     * Read whole line of text, remove leading and trailing whitespaces from the text.
-     *
-     * @return read the whole line.
-     */
-    public static String readLine() {
-        return sc.nextLine().trim();
-    }
-
-    /** Display `Press Enter to continue...` after finishing selected options. */
-    public static void pressEnterToContinue() {
-        System.out.print("Press Enter key to continue...");
-        try {
-            sc.nextLine();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Creates a string of spaces that is 'spaces' spaces long.
@@ -93,8 +66,7 @@ public class Helper {
     private static StringBuffer buildStringFromNode(Node node) {
         StringBuffer buffer = new StringBuffer();
 
-        if (node instanceof TextNode) {
-            TextNode textNode = (TextNode) node;
+        if (node instanceof TextNode textNode) {
             buffer.append(textNode.text().trim());
         }
 
@@ -102,8 +74,7 @@ public class Helper {
             buffer.append(buildStringFromNode(childNode));
         }
 
-        if (node instanceof Element) {
-            Element element = (Element) node;
+        if (node instanceof Element element) {
             String tagName = element.tagName();
             if ("p".equals(tagName) || "br".equals(tagName)) {
                 buffer.append("\n");
@@ -111,5 +82,19 @@ public class Helper {
         }
 
         return buffer;
+    }
+
+    /**
+     * Count number of lines in the file `file`.
+     * @param file the path of the file
+     * @return number of lines of the given file
+     * @throws IOException file not found or couldn't read
+     */
+    public static int countNumLinesOfFile(String file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        int lines = 0;
+        while (reader.readLine() != null) lines++;
+        reader.close();
+        return lines;
     }
 }

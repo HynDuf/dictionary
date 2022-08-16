@@ -1,6 +1,7 @@
-package dictionary.ui;
+package dictionary.ui.controller;
 
-import dictionary.server.Dictionary;
+import static dictionary.App.dictionary;
+
 import java.nio.charset.StandardCharsets;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,20 +12,20 @@ import javafx.scene.control.Label;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
-public class EditDefinitionController {
+public class EditDefinition {
     private static String editingWord;
     @FXML private Label editLabel;
     @FXML private HTMLEditor htmlEditor;
 
     public static void setEditingWord(String editingWord) {
-        EditDefinitionController.editingWord = editingWord;
+        EditDefinition.editingWord = editingWord;
     }
 
     /** Set label text and set the current definition of the editing word. */
     @FXML
     private void initialize() {
         editLabel.setText("Chỉnh sửa giải nghĩa của từ `" + editingWord + "`");
-        htmlEditor.setHtmlText(Dictionary.lookUpWord(editingWord));
+        htmlEditor.setHtmlText(dictionary.lookUpWord(editingWord));
     }
 
     /**
@@ -41,7 +42,7 @@ public class EditDefinitionController {
                         "<html dir=\"ltr\"><head></head><body contenteditable=\"true\">", "");
         definition = definition.replace("</body></html>", "");
         definition = definition.replace("\"", "'");
-        if (Dictionary.updateWordDefinition(editingWord, definition)) {
+        if (dictionary.updateWordDefinition(editingWord, definition)) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Thông báo");
             alert.setContentText("Cập nhật giải nghĩa của từ `" + editingWord + "` thành công!");

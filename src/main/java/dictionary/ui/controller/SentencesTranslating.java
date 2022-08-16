@@ -1,7 +1,7 @@
-package dictionary.ui;
+package dictionary.ui.controller;
 
 import dictionary.server.TextToSpeech;
-import dictionary.server.google_translate_api.TranslatorApi;
+import dictionary.server.TranslatorApi;
 import java.io.IOException;
 import java.util.Objects;
 import javafx.event.ActionEvent;
@@ -15,14 +15,14 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class SentencesTranslatingController {
+public class SentencesTranslating {
     @FXML private TextArea sourceText;
     @FXML private TextArea sinkText;
     private boolean enToVi = true;
     @FXML private Label upButton;
     @FXML private Label downButton;
 
-    public SentencesTranslatingController() {}
+    public SentencesTranslating() {}
 
     /**
      * Translate the text from English to Vietnamese (or reverse, depends on current state `enToVi`)

@@ -1,6 +1,8 @@
-package dictionary.ui;
+package dictionary.ui.controller;
 
-import dictionary.server.Dictionary;
+import static dictionary.App.dictionary;
+
+import dictionary.ui.HelperUI;
 import java.io.IOException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -13,7 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class ExportToFileController {
+public class ExportToFile {
     @FXML private Button browseButton;
     @FXML private Label dirLabel;
     @FXML private TextField fileName;
@@ -42,11 +44,11 @@ public class ExportToFileController {
      */
     @FXML
     public void submitExport() {
-        String file = fileName.getText();
-        String dirPath = dirLabel.getText();
+        String file = fileName.getText().strip();
+        String dirPath = dirLabel.getText().strip();
         if (!dirPath.isEmpty() && !file.isEmpty()) {
             try {
-                Dictionary.exportToFile(dirPath + "\\" + file);
+                dictionary.exportToFile(dirPath + "\\" + file);
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Thông báo");
                 alert.setContentText(

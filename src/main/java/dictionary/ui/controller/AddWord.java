@@ -1,7 +1,9 @@
-package dictionary.ui;
+package dictionary.ui.controller;
 
-import dictionary.server.Dictionary;
-import java.io.IOException;
+import static dictionary.App.dictionary;
+
+import dictionary.ui.HelperUI;
+import dictionary.ui.ImportWordService;
 import java.nio.charset.StandardCharsets;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -11,16 +13,20 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
-public class AddWordController {
+public class AddWord {
     @FXML private Button browseButton;
     @FXML private HTMLEditor htmlEditor;
     @FXML private TextField inputText;
     @FXML private Label fileLabel;
+    @FXML private AnchorPane anchorPane;
+    private ImportWordService service;
 
     /** Focus on the `browseButton` when open the window. */
     @FXML
@@ -36,13 +42,13 @@ public class AddWordController {
     @FXML
     public void saveWord(ActionEvent event) {
         String target = inputText.getText();
-        byte[] ptext = htmlEditor.getHtmlText().getBytes(StandardCharsets.ISO_8859_1);
-        String definition = new String(ptext, StandardCharsets.UTF_8);
+        byte[] pText = htmlEditor.getHtmlText().getBytes(StandardCharsets.ISO_8859_1);
+        String definition = new String(pText, StandardCharsets.UTF_8);
         definition =
                 definition.replace(
                         "<html file=\"ltr\"><head></head><body contenteditable=\"true\">", "");
         definition = definition.replace("</body></html>", "");
-        if (Dictionary.insertWord(target, definition)) {
+        if (dictionary.insertWord(target, definition)) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Thông báo");
             alert.setContentText("Thêm từ `" + target + "` thành công!");
@@ -70,32 +76,37 @@ public class AddWordController {
     }
 
     /**
-     * Import words from the selected file into the dictionary.
-     *
-     * @param event action event
+     * If user close the window while importing (hasn't finished) then the task will also cancel.
+     */
+    public void closeWhileImporting() {
+        if (service != null) {
+            service.cancel();
+        }
+    }
+
+    /**
+     * Import words from the selected file into the dictionary. Make a background task for this to
+     * show the progress bar of the task as well.
      */
     @FXML
-    public void submitImport(ActionEvent event) {
-        String filePath = fileLabel.getText();
+    public void submitImport() {
+        String filePath = fileLabel.getText().strip();
         if (!filePath.isEmpty()) {
-            try {
-                String content = Dictionary.importFromFile(filePath);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Thông báo");
-                TextArea area = new TextArea(content);
-                area.setWrapText(true);
-                area.setEditable(false);
-                alert.getDialogPane().setContent(area);
-                alert.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Lỗi");
-                alert.setContentText("Không tìm thấy đường dẫn của file `" + filePath + "`!");
-                alert.show();
-            }
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.close();
+            service = new ImportWordService(filePath);
+            Region veil = new Region();
+            veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4)");
+            veil.setPrefSize(657, 707);
+            ProgressBar pBar = new ProgressBar();
+            pBar.setPrefSize(200, 40);
+            pBar.setStyle("-fx-progress-color: green;");
+            pBar.setLayoutX(228.5);
+            pBar.setLayoutY(333.5);
+            pBar.progressProperty().bind(service.progressProperty());
+            veil.visibleProperty().bind(service.runningProperty());
+            pBar.visibleProperty().bind(service.runningProperty());
+            anchorPane.getChildren().addAll(veil, pBar);
+            service.start();
+            System.out.println("OK");
         }
     }
 

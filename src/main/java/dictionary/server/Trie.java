@@ -61,10 +61,10 @@ public class Trie {
      * @return an ArrayList of String contains the words start with `prefix`
      */
     public static ArrayList<String> search(String prefix) {
-        searchedWords.clear();
         if (prefix.isEmpty()) {
-            return searchedWords;
+            return new ArrayList<>();
         }
+        searchedWords.clear();
         int length = prefix.length();
         TrieNode pCrawl = root;
 

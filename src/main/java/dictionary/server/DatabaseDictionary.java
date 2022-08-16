@@ -1,8 +1,5 @@
-package dictionary.server.database;
+package dictionary.server;
 
-import dictionary.server.Word;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
-public class Database {
+public class DatabaseDictionary extends Dictionary {
     private static final String HOST_NAME = "localhost";
     private static final String DB_NAME = "en-vi-dictionary";
     private static final String USER_NAME = "en-vi-dictionary";
@@ -21,37 +18,6 @@ public class Database {
             "jdbc:mysql://" + HOST_NAME + ":" + PORT + "/" + DB_NAME;
 
     private static Connection connection = null;
-
-    /**
-     * Database is already connected or not.
-     *
-     * @return true if Database is already connected, false otherwise
-     */
-    public static boolean isConnected() {
-        return connection != null;
-    }
-
-    /**
-     * Connect to MYSQL database.
-     *
-     * <p>Reference: https://stackoverflow.com/questions/2839321/connect-java-to-a-mysql-database
-     */
-    public static void connectToDatabase() {
-        System.out.println("Connecting to database...");
-        try {
-            connection = DriverManager.getConnection(MYSQL_URL, USER_NAME, PASSWORD);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Database connected!\n");
-    }
-
-    /** Close the Database connection. */
-    public static void closeDatabase() {
-        close(connection);
-        System.out.println("Database disconnected!");
-    }
 
     /**
      * Close connection to MYSQL database.
@@ -99,12 +65,41 @@ public class Database {
     }
 
     /**
+     * Connect to MYSQL database.
+     *
+     * <p>Reference: https://stackoverflow.com/questions/2839321/connect-java-to-a-mysql-database
+     */
+    private void connectToDatabase() throws SQLException {
+        System.out.println("Connecting to database...");
+        connection = DriverManager.getConnection(MYSQL_URL, USER_NAME, PASSWORD);
+        System.out.println("Database connected!\n");
+    }
+
+    /** Connect to MYSQL database. Add all words on the database into Trie data structure. */
+    @Override
+    public void initialize() throws SQLException {
+        connectToDatabase();
+        ArrayList<String> targets = getAllWordTargets();
+        for (String word : targets) {
+            Trie.insert(word);
+        }
+    }
+
+    /** Close the Database connection. */
+    @Override
+    public void close() {
+        close(connection);
+        System.out.println("Database disconnected!");
+    }
+
+    /**
      * Lookup an English word `target` in database (look for the exact word `target`).
      *
      * @param target the searched word (full word)
      * @return the Vietnamese definition of `target`, if not found return "404" as a String.
      */
-    public static String lookUpWord(final String target) {
+    @Override
+    public String lookUpWord(final String target) {
         final String SQL_QUERY = "SELECT definition FROM dictionary WHERE target = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
@@ -136,7 +131,8 @@ public class Database {
      * @param definition Vietnamese definition
      * @return true if `target` hasn't been added yet, false otherwise
      */
-    public static boolean insertWord(final String target, final String definition) {
+    @Override
+    public boolean insertWord(final String target, final String definition) {
         final String SQL_QUERY = "INSERT INTO dictionary (target, definition) VALUES (?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
@@ -150,10 +146,12 @@ public class Database {
             } finally {
                 close(ps);
             }
+            Trie.insert(target);
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return true;
     }
 
     /**
@@ -164,7 +162,8 @@ public class Database {
      * @param target the deleted word
      * @return true if successfully delete, false otherwise
      */
-    public static boolean deleteWord(final String target) {
+    @Override
+    public boolean deleteWord(final String target) {
         final String SQL_QUERY = "DELETE FROM dictionary WHERE target = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
@@ -177,10 +176,12 @@ public class Database {
             } finally {
                 close(ps);
             }
+            Trie.delete(target);
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return true;
     }
 
     /**
@@ -192,7 +193,8 @@ public class Database {
      * @param definition the update definition
      * @return true if successfully updated, false otherwise
      */
-    public static boolean updateWordDefinition(final String target, final String definition) {
+    @Override
+    public boolean updateWordDefinition(final String target, final String definition) {
         final String SQL_QUERY = "UPDATE dictionary SET definition = ? WHERE target = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
@@ -219,7 +221,7 @@ public class Database {
      * @return ArrayList of Words
      * @throws SQLException exception
      */
-    private static ArrayList<Word> getWordsFromResultSet(PreparedStatement ps) throws SQLException {
+    private ArrayList<Word> getWordsFromResultSet(PreparedStatement ps) throws SQLException {
         try {
             ResultSet rs = ps.executeQuery();
             try {
@@ -242,7 +244,8 @@ public class Database {
      *
      * @return an 'ArrayList(Word)' include all the words from the database
      */
-    public static ArrayList<Word> getAllWords() {
+    @Override
+    public ArrayList<Word> getAllWords() {
         final String SQL_QUERY = "SELECT * FROM dictionary";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
@@ -260,7 +263,7 @@ public class Database {
      * @param wordIndexTo right bound
      * @return an ArrayList of Word get from the database
      */
-    public static ArrayList<Word> getWordsPartial(int wordIndexFrom, int wordIndexTo) {
+    public ArrayList<Word> getWordsPartial(int wordIndexFrom, int wordIndexTo) {
         final String SQL_QUERY = "SELECT * FROM dictionary WHERE id >= ? AND id <= ?";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
@@ -278,7 +281,8 @@ public class Database {
      *
      * @return ArrayList of string of words target
      */
-    public static ArrayList<String> getAllWordsTarget() {
+    @Override
+    public ArrayList<String> getAllWordTargets() {
         final String SQL_QUERY = "SELECT * FROM dictionary";
         try {
             PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
@@ -301,50 +305,5 @@ public class Database {
             e.printStackTrace();
         }
         return new ArrayList<>();
-    }
-
-    /**
-     * Export all words to a csv file with `filename` name to current pwd.
-     *
-     * @param filename the name of the file to export
-     */
-    public static void exportToCsv(String filename) {
-        final String SQL_QUERY = "SELECT * FROM dictionary";
-        try {
-            PreparedStatement ps = connection.prepareStatement(SQL_QUERY);
-            try {
-                ResultSet rs = ps.executeQuery();
-                try {
-                    FileWriter fw = new FileWriter(filename + ".csv");
-                    int cols = rs.getMetaData().getColumnCount();
-                    for (int i = 1; i <= cols; ++i) {
-                        fw.append(rs.getMetaData().getColumnLabel(i));
-                        if (i < cols) {
-                            fw.append(',');
-                        } else {
-                            fw.append('\n');
-                        }
-                    }
-
-                    while (rs.next()) {
-                        for (int i = 1; i <= cols; ++i) {
-                            fw.append(rs.getString(i));
-                            if (i < cols) {
-                                fw.append(',');
-                            }
-                        }
-                        fw.append('\n');
-                    }
-                    fw.flush();
-                    fw.close();
-                } finally {
-                    close(rs);
-                }
-            } finally {
-                close(ps);
-            }
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
     }
 }

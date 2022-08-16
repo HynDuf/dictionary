@@ -107,7 +107,7 @@ public class History {
 
     /**
      * Refactor the history searches. Maintain at max `MAX_WORDS_HISTORY` most recent word in the
-     * ArrayList. Exported to `dictionary-user-data/words-search-history.txt` after that.
+     * ArrayList.
      */
     public static void refactorHistory() {
         if (historySearch.size() <= MAX_WORDS_HISTORY) {
@@ -116,6 +116,5 @@ public class History {
         while (historySearch.size() > MAX_WORDS_HISTORY) {
             historySearch.remove(0);
         }
-        exportHistory();
     }
 }
