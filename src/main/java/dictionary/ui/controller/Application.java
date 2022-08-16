@@ -19,7 +19,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -36,21 +38,119 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class Application {
+    public static boolean lightMode = true;
     private String lastLookUpWord = "";
     @FXML private TextField inputText;
     @FXML private ListView<String> searchList;
     @FXML private WebView webView;
     private int lastIndex = 0;
     private Image historyIcon;
+    @FXML private Button addWordButton;
+    @FXML private Button showInformationButton;
+    @FXML private Button showInstructionButton;
+    @FXML private Button exportButton;
+    @FXML private Button pronounceButton;
+    @FXML private Button editButton;
+    @FXML private Button deleteButton;
+    @FXML private Button googleButton;
+    @FXML private Button modeToggle;
 
     public Application() {}
+
+    public static boolean isLightMode() {
+        return lightMode;
+    }
+
+    public static void toggleMode() {
+        lightMode = !lightMode;
+    }
 
     /** Focus on the inputText TextField when first open. Prepare the search list after that. */
     @FXML
     private void initialize() {
         Platform.runLater(() -> inputText.requestFocus());
-        prepareHistoryIcon();
+        prepareHistoryIcon(isLightMode());
+        prepareButtonIcon(isLightMode());
         prepareSearchList();
+    }
+
+    @FXML
+    public void toggleModeButton() {
+        toggleMode();
+        if (!isLightMode()) {
+            modeToggle.getScene().getStylesheets().clear();
+            modeToggle.getScene().getStylesheets().add("/css/Application-dark.css");
+            inputText.requestFocus();
+            prepareHistoryIcon(false);
+            prepareButtonIcon(false);
+            if (!lastLookUpWord.isEmpty()) {
+                lookUpWord();
+            } else {
+                webView.getEngine()
+                        .loadContent(
+                                "<html><body bgcolor='#262837' style='color:#babccf'></body></html>",
+                                "text/html");
+            }
+        } else {
+            modeToggle.getScene().getStylesheets().clear();
+            modeToggle.getScene().getStylesheets().add("/css/Application-light.css");
+            inputText.requestFocus();
+            prepareHistoryIcon(true);
+            prepareButtonIcon(true);
+            if (!lastLookUpWord.isEmpty()) {
+                lookUpWord();
+            } else {
+                webView.getEngine().loadContent("", "text/html");
+            }
+        }
+        prepareSearchList();
+    }
+
+    /**
+     * Prepare the icons of all the buttons based on the given `mode` (dark mode is 0 and light mode
+     * is 1).
+     *
+     * @param mode light mode or dark mode icons
+     */
+    public void prepareButtonIcon(boolean mode) {
+        String suffix = (mode ? "light" : "dark");
+        ImageView addIcon = new ImageView("icon/add-icon-" + suffix + ".png");
+        addIcon.setFitHeight(18);
+        addIcon.setFitWidth(18);
+        ImageView infoIcon = new ImageView("icon/info-icon-" + suffix + ".png");
+        infoIcon.setFitHeight(18);
+        infoIcon.setFitWidth(18);
+        ImageView helpIcon = new ImageView("icon/help-icon-" + suffix + ".png");
+        helpIcon.setFitHeight(18);
+        helpIcon.setFitWidth(18);
+        ImageView exportIcon = new ImageView("icon/export-icon-" + suffix + ".png");
+        exportIcon.setFitHeight(18);
+        exportIcon.setFitWidth(18);
+        ImageView pronounceIcon = new ImageView("icon/pronounce-icon-" + suffix + ".png");
+        pronounceIcon.setFitHeight(18);
+        pronounceIcon.setFitWidth(18);
+        ImageView editIcon = new ImageView("icon/edit-icon-" + suffix + ".png");
+        editIcon.setFitHeight(18);
+        editIcon.setFitWidth(18);
+        ImageView deleteIcon = new ImageView("icon/delete-icon-" + suffix + ".png");
+        deleteIcon.setFitHeight(18);
+        deleteIcon.setFitWidth(18);
+        ImageView googleIcon = new ImageView("icon/google-icon-" + suffix + ".png");
+        googleIcon.setFitHeight(18);
+        googleIcon.setFitWidth(18);
+        ImageView modeIcon = new ImageView("icon/mode-icon-" + suffix + ".png");
+        modeIcon.setFitHeight(30);
+        modeIcon.setFitWidth(30);
+
+        addWordButton.setGraphic(addIcon);
+        showInformationButton.setGraphic(infoIcon);
+        showInstructionButton.setGraphic(helpIcon);
+        exportButton.setGraphic(exportIcon);
+        pronounceButton.setGraphic(pronounceIcon);
+        editButton.setGraphic(editIcon);
+        deleteButton.setGraphic(deleteIcon);
+        googleButton.setGraphic(googleIcon);
+        modeToggle.setGraphic(modeIcon);
     }
 
     /**
@@ -69,10 +169,14 @@ public class Application {
     }
 
     /** Load the history icon into its corresponding icon image. */
-    private void prepareHistoryIcon() {
+    private void prepareHistoryIcon(boolean mode) {
         try {
             historyIcon =
-                    new Image(new FileInputStream("src/main/resources/icon/history-icon.png"));
+                    new Image(
+                            new FileInputStream(
+                                    "src/main/resources/icon/history-icon-"
+                                            + (mode ? "light" : "dark")
+                                            + ".png"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,26 +202,26 @@ public class Application {
         }
         searchList.setCellFactory(
                 new Callback<>() {
-
                     @Override
                     public ListCell<String> call(ListView<String> list) {
                         return new ListCell<>() {
                             @Override
                             public void updateItem(String item, boolean empty) {
                                 super.updateItem(item, empty);
-                                if (empty) {
+                                if (empty || item == null) {
                                     setGraphic(null);
                                     setText(null);
-                                } else if (item != null && !item.startsWith("#")) {
+                                } else if (item.charAt(0) != '#') {
+                                    setGraphic(null);
                                     setText(item);
-                                    setFont(Font.font(14));
-                                } else if (item != null) {
+                                    setFont(Font.font(15));
+                                } else {
                                     ImageView imageView = new ImageView(historyIcon);
-                                    imageView.setFitHeight(14);
-                                    imageView.setFitWidth(14);
+                                    imageView.setFitHeight(15);
+                                    imageView.setFitWidth(15);
                                     setGraphic(imageView);
                                     setText("  " + item.substring(1));
-                                    setFont(Font.font(14));
+                                    setFont(Font.font(15));
                                 }
                             }
                         };
@@ -139,11 +243,26 @@ public class Application {
         String definition = dictionary.lookUpWord(target);
         if (definition.equals("404")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            setAlertCss(alert);
             alert.setTitle("Thông báo");
             alert.setContentText("Từ này không tồn tại!");
             alert.show();
+            if (!Application.isLightMode()) {
+                webView.getEngine()
+                        .loadContent(
+                                "<html><body bgcolor='#262837' style='color:#babccf'></body></html>",
+                                "text/html");
+            } else {
+                webView.getEngine().loadContent("", "text/html");
+            }
         } else {
             lastLookUpWord = target;
+            if (!Application.isLightMode()) {
+                definition =
+                        "<html><body bgcolor='#262837' style='color:#babccf'>"
+                                + definition
+                                + "</body></html>";
+            }
             webView.getEngine().loadContent(definition, "text/html");
         }
     }
@@ -200,17 +319,25 @@ public class Application {
      * @param event action event
      */
     @FXML
-    public void changeToSentencesTranslatingApplication(ActionEvent event) {
+    public void changeToSentencesTranslating(ActionEvent event) {
         try {
             Parent root =
                     FXMLLoader.load(
                             Objects.requireNonNull(
                                     getClass()
                                             .getClassLoader()
-                                            .getResource(
-                                                    "fxml/SentencesTranslatingApplication.fxml")));
+                                            .getResource("fxml/SentencesTranslating.fxml")));
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
+            if (!Application.isLightMode()) {
+                scene.getStylesheets()
+                        .add(
+                                Objects.requireNonNull(
+                                                getClass()
+                                                        .getResource(
+                                                                "/css/SentencesTranslating-dark.css"))
+                                        .toExternalForm());
+            }
             appStage.setTitle("Sentences Translator");
             appStage.setScene(scene);
             appStage.show();
@@ -244,6 +371,7 @@ public class Application {
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Stage newStage = new Stage();
             Scene scene = new Scene(root);
+            setGeneralCss(scene);
             newStage.setScene(scene);
             newStage.initOwner(appStage);
             newStage.setTitle("Xuất dữ liệu từ điển");
@@ -272,6 +400,7 @@ public class Application {
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             infStage.initOwner(appStage);
             Scene scene = new Scene(root);
+            setGeneralCss(scene);
             infStage.setTitle("Về ứng dụng");
             infStage.setScene(scene);
             infStage.initModality(Modality.APPLICATION_MODAL);
@@ -299,6 +428,7 @@ public class Application {
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             insStage.initOwner(appStage);
             Scene scene = new Scene(root);
+            setGeneralCss(scene);
             insStage.setTitle("Hướng dẫn sử dụng");
             insStage.setScene(scene);
             insStage.initModality(Modality.APPLICATION_MODAL);
@@ -317,6 +447,7 @@ public class Application {
     public void editWordDefinition(ActionEvent event) {
         if (lastLookUpWord.isEmpty()) {
             Alert alert = new Alert(AlertType.ERROR);
+            setAlertCss(alert);
             alert.setTitle("Thông báo");
             alert.setContentText("Chưa chọn từ để chỉnh sửa!");
             alert.show();
@@ -324,6 +455,7 @@ public class Application {
         }
         if (dictionary.lookUpWord(lastLookUpWord).equals("404")) {
             Alert alert = new Alert(AlertType.ERROR);
+            setAlertCss(alert);
             alert.setTitle("Lỗi");
             alert.setContentText(
                     "Không tồn tại từ `" + lastLookUpWord + "` trong từ điển để chỉnh sửa!");
@@ -341,6 +473,7 @@ public class Application {
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Stage newStage = new Stage();
             Scene scene = new Scene(root);
+            setGeneralCss(scene);
             newStage.setScene(scene);
             newStage.initOwner(appStage);
             newStage.setTitle("Chỉnh sửa giải nghĩa của từ");
@@ -357,12 +490,14 @@ public class Application {
     public void deleteWord() {
         if (lastLookUpWord.isEmpty()) {
             Alert alert = new Alert(AlertType.ERROR);
+            setAlertCss(alert);
             alert.setTitle("Thông báo");
             alert.setContentText("Chưa chọn từ để xóa!");
             alert.show();
         } else {
 
             Alert alert = new Alert(AlertType.CONFIRMATION);
+            setAlertCss(alert);
             alert.setTitle("Xóa từ");
             alert.setHeaderText(
                     "Bạn có chắc chắn muốn xóa từ `"
@@ -373,11 +508,13 @@ public class Application {
                 if (option.get() == ButtonType.OK) {
                     if (dictionary.deleteWord(lastLookUpWord)) {
                         Alert alert1 = new Alert(AlertType.INFORMATION);
+                        setAlertCss(alert1);
                         alert1.setTitle("Thông báo");
                         alert1.setContentText("Xóa từ `" + lastLookUpWord + "` thành công!");
                         alert1.show();
                     } else {
                         Alert alert1 = new Alert(AlertType.ERROR);
+
                         alert1.setTitle("Lỗi");
                         alert1.setContentText(
                                 "Không tồn tại từ `" + lastLookUpWord + "` trong từ điển để xóa!");
@@ -385,6 +522,7 @@ public class Application {
                     }
                 }
             }
+            lastLookUpWord = "";
         }
     }
 
@@ -404,6 +542,7 @@ public class Application {
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             addStage.initOwner(appStage);
             Scene scene = new Scene(root);
+            setGeneralCss(scene);
             addStage.setTitle("Thêm từ");
             addStage.setResizable(false);
             addStage.setScene(scene);
@@ -412,6 +551,35 @@ public class Application {
             addStage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setGeneralCss(Scene scene) {
+        scene.getStylesheets()
+                .add(
+                        Objects.requireNonNull(
+                                        getClass()
+                                                .getResource(
+                                                        (Application.isLightMode()
+                                                                ? "/css/General-light.css"
+                                                                : "/css/General-dark.css")))
+                                .toExternalForm());
+    }
+
+    /**
+     * Set CSS for alert box in case of dark mode.
+     *
+     * @param alert alert
+     */
+    private void setAlertCss(Alert alert) {
+        if (!Application.isLightMode()) {
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane
+                    .getStylesheets()
+                    .add(
+                            Objects.requireNonNull(getClass().getResource("/css/Alert-dark.css"))
+                                    .toExternalForm());
+            dialogPane.getStyleClass().add("alert");
         }
     }
 }

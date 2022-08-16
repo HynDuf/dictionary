@@ -1,0 +1,61 @@
+* {
+  -fx-text-fill: #babccf;
+}
+
+#anchorPane, #modeToggle {
+  -fx-background-color: #16161f;
+}
+
+.list-view .list-cell:odd {
+  -fx-background-color: #1f202f;
+}
+
+.button, .list-view, .text-field, .list-cell:even {
+  -fx-background-color: #262837;
+}
+
+.text-field:focused {
+  -fx-border-color: #5478ba;
+  -fx-border-width: 2px;
+}
+
+.list-view:focused {
+  -fx-border-color: #5478ba;
+}
+
+.list-cell:focused {
+  -fx-text-fill: #5478ba;
+}
+
+.button:hover {
+  -fx-background-color: #525874;
+}
+
+.button:focused {
+  -fx-border-color: #5478ba;
+  -fx-border-width: 2px;
+}
+
+#modeToggle {
+  -fx-background-color: #16161f;
+}
+
+#modeToggle:focused {
+  -fx-background-color: #16161f;
+  -fx-border-color: none;
+}
+
+.scroll-bar:vertical {
+  -fx-background-color: #16161f;
+
+}
+
+.scroll-bar:vertical .thumb {
+  -fx-background-color: derive(#262837, 60.0%);
+  -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:vertical .thumb:hover {
+  -fx-background-color: derive(#262837, 10.0%);
+  -fx-background-radius: 2.0em;
+}

@@ -1,36 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-    prefHeight="159.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/17"
+<?import javafx.scene.text.Font?>
+<AnchorPane id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+    minWidth="-Infinity" prefHeight="304.0" prefWidth="364.0" xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1">
-    <Text layoutX="24.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0"
-        text="Về ứng dụng" wrappingWidth="474.13670349121094"/>
-    <Text layoutX="42.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0"
-        text="Từ điển E-V (v1.0)" wrappingWidth="474.13670349121094"/>
-    <Text layoutX="42.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0"
-        text="Hoàn thiện: 11/8/2022" wrappingWidth="474.13670349121094"/>
-    <Text layoutX="42.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0"
-        text="Bản quyền thuộc N1-02-OOP" wrappingWidth="474.13670349121094"/>
-    <Text layoutX="42.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0"
-        text="Dữ liệu từ API Google Translate" wrappingWidth="474.13670349121094"/>
-    <Text layoutX="24.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tính năng"
-        wrappingWidth="474.13670349121094"/>
-    <Text layoutX="42.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch từ"
-        wrappingWidth="474.13670349121094"/>
-    <Text layoutX="42.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch câu"
-        wrappingWidth="474.13670349121094"/>
-    <Text layoutX="25.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-        wrappingWidth="474.13670349121094"/>
-    <Text layoutX="25.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-        wrappingWidth="474.13670349121094"/>
-    <Text layoutX="25.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-        wrappingWidth="474.13670349121094"/>
-    <Text layoutX="25.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-        wrappingWidth="474.13670349121094"/>
-    <Text layoutX="25.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-        wrappingWidth="474.13670349121094"/>
-    <Text layoutX="25.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-"
-        wrappingWidth="474.13670349121094"/>
+    <Label layoutX="24.0" layoutY="14.0" prefHeight="25.0" prefWidth="153.0" text="Về ứng dụng:">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="24.0" layoutY="39.0" prefHeight="25.0" prefWidth="177.0"
+        text="-   Từ điển Anh - Việt (v1.0)">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="24.0" layoutY="64.0" prefHeight="25.0" prefWidth="177.0"
+        text="-   Hoàn thiện: 16/08/2022">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="24.0" layoutY="89.0" prefHeight="25.0" prefWidth="317.0"
+        text="-   Tác giả: Nhóm N1-02 OOP 2122H_INT2204_40">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="24.0" layoutY="114.0" prefHeight="25.0" prefWidth="177.0"
+        text="     +    Huỳnh Tiến Dũng">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="24.0" layoutY="139.0" prefHeight="25.0" prefWidth="177.0"
+        text="     +    Lê Hải Đăng">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="24.0" layoutY="164.0" prefHeight="25.0" prefWidth="177.0"
+        text="     +    Trần Mạnh Dũng">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="26.0" layoutY="211.0" prefHeight="25.0" prefWidth="317.0" text="-   Tính năng:">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="26.0" layoutY="236.0" prefHeight="25.0" prefWidth="324.0"
+        text="     +    Giải nghĩa của từ tiếng Anh sang Tiếng Việt.">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="26.0" layoutY="261.0" prefHeight="25.0" prefWidth="350.0"
+        text="     +    Tích hợp Google Translate.">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="24.0" layoutY="189.0" prefHeight="25.0" prefWidth="332.0"
+        text="-   Github: https://github.com/HynDuf7/dictionary">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
 </AnchorPane>

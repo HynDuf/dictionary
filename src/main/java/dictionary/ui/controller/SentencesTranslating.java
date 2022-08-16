@@ -10,8 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,8 +23,49 @@ public class SentencesTranslating {
     private boolean enToVi = true;
     @FXML private Label upButton;
     @FXML private Label downButton;
+    @FXML private Button translateButton;
+    @FXML private Button helpButton;
+    @FXML private Button dictionaryButton;
+    @FXML private Button voiceButton;
+    @FXML private Button alterButton;
 
     public SentencesTranslating() {}
+
+    @FXML
+    private void initialize() {
+        prepareButtonIcon(Application.isLightMode());
+    }
+
+    /**
+     * Prepare the icons of all the buttons based on the given `mode` (dark mode is 0 and light mode
+     * is 1).
+     *
+     * @param mode light mode or dark mode icons
+     */
+    public void prepareButtonIcon(boolean mode) {
+        String suffix = (mode ? "light" : "dark");
+        ImageView translateIcon = new ImageView("icon/translate-icon-" + suffix + ".png");
+        translateIcon.setFitHeight(18);
+        translateIcon.setFitWidth(18);
+        ImageView helpIcon = new ImageView("icon/help-icon-" + suffix + ".png");
+        helpIcon.setFitHeight(18);
+        helpIcon.setFitWidth(18);
+        ImageView dictionaryIcon = new ImageView("icon/dictionary-icon-" + suffix + ".png");
+        dictionaryIcon.setFitHeight(18);
+        dictionaryIcon.setFitWidth(18);
+        ImageView voiceIcon = new ImageView("icon/voice-icon-" + suffix + ".png");
+        voiceIcon.setFitHeight(28);
+        voiceIcon.setFitWidth(25);
+        ImageView alterIcon = new ImageView("icon/alter-icon-" + suffix + ".png");
+        alterIcon.setFitHeight(18);
+        alterIcon.setFitWidth(18);
+
+        translateButton.setGraphic(translateIcon);
+        helpButton.setGraphic(helpIcon);
+        dictionaryButton.setGraphic(dictionaryIcon);
+        voiceButton.setGraphic(voiceIcon);
+        alterButton.setGraphic(alterIcon);
+    }
 
     /**
      * Translate the text from English to Vietnamese (or reverse, depends on current state `enToVi`)
@@ -53,8 +96,16 @@ public class SentencesTranslating {
                                             .getResource("fxml/Application.fxml")));
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
+            scene.getStylesheets()
+                    .add(
+                            Objects.requireNonNull(
+                                            getClass()
+                                                    .getResource(
+                                                            (Application.isLightMode()
+                                                                    ? "/css/Application-light.css"
+                                                                    : "/css/Application-dark.css")))
+                                    .toExternalForm());
             appStage.setTitle("Dictionary");
-            appStage.setResizable(false);
             appStage.setScene(scene);
             appStage.show();
         } catch (IOException e) {
@@ -81,6 +132,13 @@ public class SentencesTranslating {
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             senInsStage.initOwner(appStage);
             Scene scene = new Scene(root);
+            if (!Application.isLightMode()) {
+                scene.getStylesheets()
+                        .add(
+                                Objects.requireNonNull(
+                                                getClass().getResource("/css/General-dark.css"))
+                                        .toExternalForm());
+            }
             senInsStage.setTitle("Hướng dẫn sử dụng");
             senInsStage.setResizable(false);
             senInsStage.setScene(scene);
@@ -113,11 +171,11 @@ public class SentencesTranslating {
     public void swapLanguage() {
         enToVi = !enToVi;
         if (enToVi) {
-            upButton.setText("Tiếng Anh");
-            downButton.setText("Tiếng Việt");
+            upButton.setText("English");
+            downButton.setText("Vietnamese");
         } else {
-            upButton.setText("Tiếng Việt");
-            downButton.setText("Tiếng Anh");
+            upButton.setText("Vietnamese");
+            downButton.setText("English");
         }
     }
 }

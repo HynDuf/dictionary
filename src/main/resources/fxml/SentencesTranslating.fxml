@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane id="anchorPane" prefHeight="580.0" prefWidth="948.0" xmlns="http://javafx.com/javafx/17"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="dictionary.ui.controller.SentencesTranslating">
+    <TextArea fx:id="sourceText" layoutX="39.0" layoutY="48.0" prefHeight="187.0" prefWidth="727.0"
+        promptText="Text to translate...">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </TextArea>
+    <Button fx:id="translateButton" layoutX="39.0" layoutY="244.0" mnemonicParsing="false"
+        onAction="#translateEnToVi" prefHeight="43.0" prefWidth="102.0" text=" Translate">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+    <Button fx:id="voiceButton" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="151.0"
+        layoutY="244.0" mnemonicParsing="false" onAction="#textToSpeech" prefHeight="43.0"
+        prefWidth="64.0">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+    <Button fx:id="alterButton" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="225.0"
+        layoutY="244.0" mnemonicParsing="false" onAction="#swapLanguage" prefHeight="43.0"
+        prefWidth="64.0">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+    <TextArea fx:id="sinkText" editable="false" layoutX="39.0" layoutY="363.0" prefHeight="187.0"
+        prefWidth="727.0">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </TextArea>
+    <Label fx:id="upButton" layoutX="39.0" layoutY="14.0" prefHeight="34.0" prefWidth="83.0"
+        text="English">
+        <font>
+            <Font size="17.0"/>
+        </font>
+    </Label>
+    <Label fx:id="downButton" layoutX="39.0" layoutY="329.0" prefHeight="34.0" prefWidth="96.0"
+        text="Vietnamese">
+        <font>
+            <Font size="17.0"/>
+        </font>
+    </Label>
+    <Button fx:id="dictionaryButton" layoutX="787.0" layoutY="515.0" mnemonicParsing="false"
+        onAction="#changeToApplication" prefHeight="34.0" prefWidth="143.0" text=" Dictionary">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+    <Button fx:id="helpButton" layoutX="787.0" layoutY="48.0" mnemonicParsing="false"
+        onAction="#showSentencesInstruction" prefHeight="34.0" prefWidth="143.0" text=" Help">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+</AnchorPane>

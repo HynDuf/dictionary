@@ -5,6 +5,7 @@ import static dictionary.App.dictionary;
 import dictionary.ui.HelperUI;
 import dictionary.ui.ImportWordService;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -32,6 +34,9 @@ public class AddWord {
     @FXML
     private void initialize() {
         Platform.runLater(() -> browseButton.requestFocus());
+        if (!Application.isLightMode()) {
+            htmlEditor.setHtmlText("<body style='background-color: #262837; color: #babccf'/>");
+        }
     }
 
     /**
@@ -46,15 +51,17 @@ public class AddWord {
         String definition = new String(pText, StandardCharsets.UTF_8);
         definition =
                 definition.replace(
-                        "<html file=\"ltr\"><head></head><body contenteditable=\"true\">", "");
+                        "<html dir=\"ltr\"><head></head><body contenteditable=\"true\">", "");
         definition = definition.replace("</body></html>", "");
         if (dictionary.insertWord(target, definition)) {
             Alert alert = new Alert(AlertType.INFORMATION);
+            setAlertCss(alert);
             alert.setTitle("Thông báo");
             alert.setContentText("Thêm từ `" + target + "` thành công!");
             alert.show();
         } else {
             Alert alert = new Alert(AlertType.ERROR);
+            setAlertCss(alert);
             alert.setTitle("Lỗi");
             alert.setContentText("Thêm từ `" + target + "` không thành công!");
             alert.show();
@@ -106,7 +113,6 @@ public class AddWord {
             pBar.visibleProperty().bind(service.runningProperty());
             anchorPane.getChildren().addAll(veil, pBar);
             service.start();
-            System.out.println("OK");
         }
     }
 
@@ -119,5 +125,22 @@ public class AddWord {
     public void quitWindow(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    /**
+     * Set CSS for alert box in case of dark mode.
+     *
+     * @param alert alert
+     */
+    private void setAlertCss(Alert alert) {
+        if (!Application.isLightMode()) {
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane
+                    .getStylesheets()
+                    .add(
+                            Objects.requireNonNull(getClass().getResource("/css/Alert-dark.css"))
+                                    .toExternalForm());
+            dialogPane.getStyleClass().add("alert");
+        }
     }
 }

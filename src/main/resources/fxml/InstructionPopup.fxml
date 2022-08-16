@@ -4,7 +4,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<AnchorPane id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+    minWidth="-Infinity"
     prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1">
     <ImageView fitHeight="554.0" fitWidth="792.0" layoutX="47.0" layoutY="23.0"

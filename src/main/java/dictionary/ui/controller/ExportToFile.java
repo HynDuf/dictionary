@@ -4,6 +4,7 @@ import static dictionary.App.dictionary;
 
 import dictionary.ui.HelperUI;
 import java.io.IOException;
+import java.util.Objects;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -50,6 +52,7 @@ public class ExportToFile {
             try {
                 dictionary.exportToFile(dirPath + "\\" + file);
                 Alert alert = new Alert(AlertType.INFORMATION);
+                setAlertCss(alert);
                 alert.setTitle("Thông báo");
                 alert.setContentText(
                         "Thành công xuất dữ liệu ra file `" + dirPath + "\\" + file + "`");
@@ -57,10 +60,28 @@ public class ExportToFile {
             } catch (IOException e) {
                 e.printStackTrace();
                 Alert alert = new Alert(AlertType.ERROR);
+                setAlertCss(alert);
                 alert.setTitle("Lỗi");
                 alert.setContentText("Không tìm thấy đường dẫn của file!");
                 alert.show();
             }
+        }
+    }
+
+    /**
+     * Set CSS for alert box in case of dark mode.
+     *
+     * @param alert alert
+     */
+    private void setAlertCss(Alert alert) {
+        if (!Application.isLightMode()) {
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane
+                    .getStylesheets()
+                    .add(
+                            Objects.requireNonNull(getClass().getResource("/css/Alert-dark.css"))
+                                    .toExternalForm());
+            dialogPane.getStyleClass().add("alert");
         }
     }
 }

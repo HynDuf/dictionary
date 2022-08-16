@@ -1,0 +1,41 @@
+* {
+  -fx-text-fill: #babccf;
+}
+
+#anchorPane {
+  -fx-background-color: #16161f;
+}
+
+.button, .text-area .content {
+  -fx-background-color: #262837;
+}
+
+.text-field:focused {
+  -fx-border-color: #5478ba;
+  -fx-border-width: 2px;
+}
+
+
+.button:hover {
+  -fx-background-color: #525874;
+}
+
+.button:focused {
+  -fx-border-color: #5478ba;
+  -fx-border-width: 2px;
+}
+
+.scroll-bar:vertical {
+  -fx-background-color: #16161f;
+
+}
+
+.scroll-bar:vertical .thumb {
+  -fx-background-color: derive(#262837, 60.0%);
+  -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:vertical .thumb:hover {
+  -fx-background-color: derive(#262837, 10.0%);
+  -fx-background-radius: 2.0em;
+}

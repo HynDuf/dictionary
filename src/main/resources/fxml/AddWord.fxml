@@ -47,8 +47,7 @@
             <Font size="14.0"/>
         </font>
     </Button>
-    <Label fx:id="fileLabel" layoutX="122.0" layoutY="48.0" prefHeight="33.0" prefWidth="419.0"
-        style="-fx-background-color: #ded8d7;">
+    <Label fx:id="fileLabel" layoutX="122.0" layoutY="48.0" prefHeight="33.0" prefWidth="419.0">
         <font>
             <Font size="14.0"/>
         </font>

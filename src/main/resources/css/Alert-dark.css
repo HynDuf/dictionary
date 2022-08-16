@@ -1,0 +1,22 @@
+.alert {
+  -fx-background-color: #16161f;
+  -fx-text-fill: #babccf;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+}
+
+.alert:header *.header-panel {
+  -fx-background-color: #16161f;
+  -fx-text-fill: #babccf;
+}
+
+.alert:header *.header-panel > *.label {
+  -fx-background-color: #16161f;
+  -fx-text-fill: #babccf;
+}
+
+.alert > *.label.content {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #babccf;
+}

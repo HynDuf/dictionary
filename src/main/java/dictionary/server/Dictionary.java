@@ -22,6 +22,7 @@ public abstract class Dictionary {
      * close the MYSQL connection)
      */
     public void close() {}
+
     /**
      * Get all words in the dictionary.
      *

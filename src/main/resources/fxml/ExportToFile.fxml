@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="206.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/17"
+<AnchorPane id="anchorPane" prefHeight="206.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1" fx:controller="dictionary.ui.controller.ExportToFile">
     <TextField fx:id="fileName" layoutX="17.0" layoutY="95.0" prefHeight="34.0" prefWidth="475.0"
         promptText="Tên file xuất...">
@@ -19,8 +19,7 @@
             <Font size="14.0"/>
         </font>
     </Button>
-    <Label fx:id="dirLabel" layoutX="109.5" layoutY="148.0" prefHeight="34.0" prefWidth="302.0"
-        style="-fx-background-color: #ded8d7;">
+    <Label fx:id="dirLabel" layoutX="109.5" layoutY="148.0" prefHeight="34.0" prefWidth="302.0">
         <font>
             <Font size="14.0"/>
         </font>
