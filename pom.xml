@@ -46,12 +46,7 @@
             <artifactId>javafx-web</artifactId>
             <version>17-ea+11</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.sf.sociaal/freetts -->
-        <dependency>
-            <groupId>net.sf.sociaal</groupId>
-            <artifactId>freetts</artifactId>
-            <version>1.2.2</version>
-        </dependency>
+
         <dependency>
             <groupId>javazoom</groupId>
             <artifactId>jlayer</artifactId>
