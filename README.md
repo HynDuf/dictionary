@@ -2,6 +2,10 @@
 
 Dictionary application (English to Vietnamese) for 2122H_INT2204_40 OOP Course written in Java
 
+**Note**: This is the final GUI version of the dictionary. The CMD version is on branch `cmd`.
+
+**Update**: We got second highest score of all the groups though.
+
 ## Table of contents
 
 - [Authors](#authors)
@@ -59,7 +63,7 @@ Group N1_02:
   database `en-vi-dictionary` (`src/main/resources/sql/dictionary.sql`).
 
 **Note**: You can configure your own username, port, password, ... by changing those accordingly
-in `src/main/java/dictionary/server/database/Database.java`.
+in `src/main/java/dictionary/server/DatabaseDictionary.java`.
 
 After uploading the `dictionary.sql` file, next time you only need to start XAMPP (Start Apache and
 MYSQL) if you want to use the dictionary with MYSQL Database.
